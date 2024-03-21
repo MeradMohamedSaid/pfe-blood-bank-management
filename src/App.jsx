@@ -1,9 +1,5 @@
 function App() {
-  return (
-    <>
-      <p className="text-red-500">Test</p>
-    </>
-  );
+  return <div></div>;
 }
 
 export default App;

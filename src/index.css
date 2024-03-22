@@ -15,8 +15,25 @@ h6 {
   font-family: "Poppins", sans-serif;
 }
 
+body {
+  background: linear-gradient(0deg, rgba(255, 221, 228, 1) 0%, rgba(255, 255, 255, 1) 100%);
+}
 
 .container {
   max-width: 1200px;
   margin: auto;
+}
+
+@layer base {
+  .text-red {
+    @apply text-[#F0073B]
+  }
+
+  .bg-red {
+    @apply bg-[#F0073B]
+  }
+
+  .border-red {
+    @apply border-[#F0073B]
+  }
 }

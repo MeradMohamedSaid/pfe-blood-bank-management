@@ -10,6 +10,8 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Navbar from "./components/Navbar.jsx";
 import "./i18n";
+import { Suspense } from "react";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,7 +22,9 @@ const router = createBrowserRouter([
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Navbar />
-    <RouterProvider router={router} />
+    <Suspense>
+      <Navbar />
+      <RouterProvider router={router} />
+    </Suspense>
   </React.StrictMode>
 );

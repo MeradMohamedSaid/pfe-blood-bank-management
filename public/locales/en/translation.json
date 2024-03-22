@@ -1,14 +1,9 @@
 {
-  "translation": {
-    "greeting": "Hello!",
-    "farewell": "Goodbye!",
-    "button": {
-      "login": "Login",
-      "logout": "Logout"
-    },
-    "error": {
-      "not_found": "Sorry, the page you are looking for cannot be found.",
-      "server_error": "Oops! Something went wrong on our server. Please try again later."
-    }
+  "landingpage": {
+    "title1": "Give Blood, Save Lives.",
+    "title2": "Be a Hero.",
+    "content": "At LifeFlow, we believe in the power of compassion and unity. Every day, lives are saved through the simple act of donating blood. Join us in our mission to ensure that no one faces medical emergencies alone. Your contribution can make a significant difference.",
+    "findCenter": "Find the closest center",
+    "startJourney": "Start the journey"
   }
 }

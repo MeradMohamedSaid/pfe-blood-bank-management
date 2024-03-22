@@ -1,14 +1,9 @@
 {
-  "translation": {
-    "greeting": "Bonjour !",
-    "farewell": "Au revoir !",
-    "button": {
-      "login": "Se connecter",
-      "logout": "Se déconnecter"
-    },
-    "error": {
-      "not_found": "Désolé, la page que vous recherchez est introuvable.",
-      "server_error": "Oups ! Quelque chose s'est mal passé sur notre serveur. Veuillez réessayer plus tard."
-    }
+  "landingpage": {
+    "title1": "Donnez du sang, sauvez des vies.",
+    "title2": "Soyez un héros.",
+    "content": "Chez LifeFlow, nous croyons en la puissance de la compassion et de l'unité. Chaque jour, des vies sont sauvées grâce au simple acte de donner du sang. Rejoignez-nous dans notre mission pour garantir que personne ne fait face à des urgences médicales seul. Votre contribution peut faire une différence significative.",
+    "findCenter": "Trouver le centre le plus proche",
+    "startJourney": "Commencer le voyage"
   }
 }

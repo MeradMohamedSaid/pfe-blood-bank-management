@@ -32,7 +32,7 @@ const Navbar = () => {
           />
         </div>
         {showDropdown && (
-          <div className="absolute top-10 right-0 bg-white border border-slate-100 rounded-full">
+          <div className="absolute top-10 -left-1 bg-white border border-slate-100 rounded-full">
             <ul>
               <li
                 className="w-6 m-2 border cursor-pointer border-slate-100 border rounded-full overflow-hidden hover:border-[#F0073B] duration-300"

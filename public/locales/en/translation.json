@@ -1,0 +1,14 @@
+{
+  "translation": {
+    "greeting": "Hello!",
+    "farewell": "Goodbye!",
+    "button": {
+      "login": "Login",
+      "logout": "Logout"
+    },
+    "error": {
+      "not_found": "Sorry, the page you are looking for cannot be found.",
+      "server_error": "Oops! Something went wrong on our server. Please try again later."
+    }
+  }
+}

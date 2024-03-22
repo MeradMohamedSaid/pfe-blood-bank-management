@@ -9,7 +9,7 @@ import LandingPage from "./pages/LandingPage.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Navbar from "./components/Navbar.jsx";
-
+import "./i18n";
 const router = createBrowserRouter([
   {
     path: "/",

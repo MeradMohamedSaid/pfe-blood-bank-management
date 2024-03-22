@@ -11,7 +11,7 @@ import NotFound from "./pages/NotFound.jsx";
 import Navbar from "./components/Navbar.jsx";
 import "./i18n";
 import { Suspense } from "react";
-
+import footerImg from "./assets/footer.png";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,6 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Suspense>
       <Navbar />
       <RouterProvider router={router} />
+      <footer>
+        <img src={footerImg} />
+      </footer>
     </Suspense>
   </React.StrictMode>
 );

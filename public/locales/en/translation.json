@@ -1,7 +1,15 @@
 {
   "landingpage": {
-    "title1": "Give Blood, Save Lives.",
-    "title2": "Be a Hero.",
+    "title1": {
+      "word1": "Give",
+      "h1": "Blood. ",
+      "word2": "Save",
+      "h2": "Life."
+    },
+    "title2": {
+      "word1": "Be",
+      "h1": "Hero!"
+    },
     "content": "At LifeFlow, we believe in the power of compassion and unity. Every day, lives are saved through the simple act of donating blood. Join us in our mission to ensure that no one faces medical emergencies alone. Your contribution can make a significant difference.",
     "findCenter": "Find the closest center",
     "startJourney": "Start the journey"

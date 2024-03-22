@@ -18,7 +18,7 @@ h6 {
 body {
   background: linear-gradient(0deg, rgba(255, 221, 228, 1) 0%, rgba(255, 255, 255, 1) 100%);
 }
-
+.text-arabic{}
 .container {
   max-width: 1200px;
   margin: auto;

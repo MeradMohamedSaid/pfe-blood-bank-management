@@ -5,13 +5,21 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
   return (
-    <div className="container h-[100vh]">
+    <div className="container ">
       <div className="w-full grid grid-cols-2 gap-8 py-10">
         {/* Text */}
         <div className="flex justify-center flex-col">
           {/* Title */}
-          <h1 className="text-5xl font-bold">{t("landingpage.title1")}</h1>
-          <h1 className="text-5xl font-bold">{t("landingpage.title2")}</h1>
+          <h1 className="text-5xl font-bold">
+            {t("landingpage.title1.word1")}{" "}
+            <span className="text-red">{t("landingpage.title1.h1")}</span>
+            {t("landingpage.title1.word2")}{" "}
+            <span className="text-red">{t("landingpage.title1.h2")}</span>
+          </h1>
+          <h1 className="text-5xl font-bold">
+            {t("landingpage.title2.word1")}{" "}
+            <span className="text-red">{t("landingpage.title2.h1")}</span>
+          </h1>
           <p className="mt-4 opacity-80">{t("landingpage.content")}</p>
           {/* Center Search */}
           <div className="flex justify-between items-center mt-10 gap-2">

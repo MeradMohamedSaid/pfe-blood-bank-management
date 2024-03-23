@@ -22,6 +22,8 @@
     "email": "E-mail :",
     "password": "Mot de passe :",
     "login": "Connexion",
-    "notDonor": "Pas encore un donateur ?"
+    "notDonor": "Pas encore un donateur ?",
+    "welcome": "Nous vous attendions avec impatience",
+    "donor": "Donateurs"
   }
 }

@@ -22,6 +22,8 @@
     "email": "E-mail :",
     "password": "Password :",
     "login": "Login",
-    "notDonor": "Not a donor yet?"
+    "notDonor": "Not a donor yet?",
+    "welcome":"We've Been Waiting For You",
+    "donor": "Donors"
   }
 }

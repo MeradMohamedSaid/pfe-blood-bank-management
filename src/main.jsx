@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar.jsx";
 import "./i18n";
 import { Suspense } from "react";
 import footerImg from "./assets/footer.png";
+import SignUp from "./pages/SignUp.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   { path: "/login", element: <Login /> },
+  { path: "/signup", element: <SignUp /> },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

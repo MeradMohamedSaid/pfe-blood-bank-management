@@ -1,4 +1,8 @@
 {
+  "navbar": {
+    "logIn": "تسجيل الدخول",
+    "signUp": "التسجيل"
+  },
   "landingpage": {
     "title1": {
       "word1": "تبرع",

@@ -1,4 +1,8 @@
 {
+  "navbar": {
+    "logIn": "Log In",
+    "signUp":"Sign Up"
+  },
   "landingpage": {
     "title1": {
       "word1": "Give",

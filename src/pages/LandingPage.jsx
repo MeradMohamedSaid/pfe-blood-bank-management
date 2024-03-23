@@ -4,19 +4,44 @@ import heroIllu from "../assets/hero-illu.svg";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
+
   return (
     <div className="container ">
-      <div className="w-full grid grid-cols-2 gap-8 py-10">
+      <div
+        className={
+          i18n.language === "ar"
+            ? "w-full grid grid-cols-2 grid-rows-1 grid-flow-col gap-8 py-10"
+            : "w-full grid grid-cols-2 grid-rows-1 grid-flow-col gap-8 py-10"
+        }
+      >
         {/* Text */}
-        <div className="flex justify-center flex-col">
+        <div
+          className={
+            i18n.language === "ar"
+              ? "flex justify-center flex-col col-start-2 text-arabic"
+              : "flex justify-center flex-col text-latin"
+          }
+        >
           {/* Title */}
-          <h1 className="text-5xl font-bold">
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl font-bold text-arabic"
+                : "text-5xl font-bold text-latin"
+            }
+          >
             {t("landingpage.title1.word1")}{" "}
             <span className="text-red">{t("landingpage.title1.h1")}</span>
             {t("landingpage.title1.word2")}{" "}
             <span className="text-red">{t("landingpage.title1.h2")}</span>
           </h1>
-          <h1 className="text-5xl font-bold">
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl font-bold text-arabic"
+                : "text-5xl font-bold text-latin"
+            }
+          >
             {t("landingpage.title2.word1")}{" "}
             <span className="text-red">{t("landingpage.title2.h1")}</span>
           </h1>
@@ -33,7 +58,7 @@ const LandingPage = () => {
           </div>
         </div>
         {/* Hero Illustration */}
-        <div>
+        <div className={i18n === "ar" ? "col-start-1 row-start-1" : ""}>
           <img src={heroIllu} alt="" />
         </div>
       </div>

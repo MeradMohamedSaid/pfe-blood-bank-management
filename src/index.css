@@ -5,6 +5,7 @@
 body {
   font-family: "Inter", sans-serif;
   direction: ltr;
+  height: 100vh;
 }
 
 h1,

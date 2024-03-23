@@ -1,7 +1,7 @@
 {
   "navbar": {
     "logIn": "Log In",
-    "signUp":"Sign Up"
+    "signUp": "Sign Up"
   },
   "landingpage": {
     "title1": {
@@ -17,5 +17,11 @@
     "content": "At LifeFlow, we believe in the power of compassion and unity. Every day, lives are saved through the simple act of donating blood. Join us in our mission to ensure that no one faces medical emergencies alone. Your contribution can make a significant difference.",
     "findCenter": "Find the closest center",
     "startJourney": "Start the journey"
+  },
+  "login": {
+    "email": "E-mail :",
+    "password": "Password :",
+    "login": "Login",
+    "notDonor": "Not a donor yet?"
   }
 }

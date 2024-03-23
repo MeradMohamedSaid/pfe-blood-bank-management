@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Suspense>
       <Navbar />
       <RouterProvider router={router} />
-      <footer>
+      <footer className="absolute bottom-0">
         <img src={footerImg} />
       </footer>
     </Suspense>

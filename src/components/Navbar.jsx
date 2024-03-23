@@ -32,8 +32,6 @@ const Navbar = () => {
       <div className="flex justify-center items-center gap-4">
         {/* Buttons */}
         <div className="flex justify-center items-center gap-2">
-          <Link to="/home">test</Link>
-
           <button
             className={
               i18n.language === "ar"

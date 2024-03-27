@@ -23,7 +23,42 @@
     "password": "Password :",
     "login": "Login",
     "notDonor": "Not a donor yet?",
-    "welcome":"We've Been Waiting For You",
+    "welcome": "We've Been Waiting For You",
     "donor": "Donors"
+  },
+  "signup": {
+    "steps": {
+      "step1": "Create Your Account",
+      "step2": "Enter Your Personal Information",
+      "step3": "Select Your Role",
+      "step4": "Fill Your Information"
+    },
+    "placeholders": {
+      "email": "name@example.com",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "name": "Name",
+      "phoneNumber": "Phone Number",
+      "clinicName": "Clinic Name",
+      "clinicAddress": "Clinic Address"
+    },
+    "buttons": {
+      "continue": "Continue"
+    },
+    "choices": {
+      "bloodType": "Blood Type",
+      "sexualRelationships": "Sexual Relationships",
+      "haveBloodRelatedDiseases": "Have Blood Related Diseases ?",
+      "male": "Male",
+      "female": "Female",
+      "donor": "donor",
+      "medicalClinic": "Medical Clinic"
+    },
+    "marriageType": {
+      "maritial": "Marital",
+      "preMaritial": "Pre-Marital",
+      "casual": "Casual",
+      "polyamorous": "Polyamorous"
+    }
   }
 }

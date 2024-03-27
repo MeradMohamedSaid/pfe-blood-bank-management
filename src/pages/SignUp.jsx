@@ -7,6 +7,12 @@ import {
   ArrowLeftIcon,
   IdentificationIcon,
   PhoneIcon,
+  ChevronRightIcon,
+  CheckIcon,
+  CheckCircleIcon,
+  MapPinIcon,
+  ArrowRightIcon,
+  ChevronLeftIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 import loginDrop from "../assets/loginDrop.png";
@@ -16,17 +22,51 @@ import medicalcenterIllu from "../assets/medicalcenter.png";
 const Login = () => {
   const [steps, setSteps] = useState(1);
   const [pwVisible, setPwVisible] = useState("false");
+  // Data Grabbers
   const [userGender, setUserGender] = useState("");
   const [userType, setUserType] = useState("");
+  const [bloodType, setBloodType] = useState("");
+  const [sexualRelationType, setSexualRelationType] = useState("");
+  const [gotDiseases, setGotDiseases] = useState(false);
+  // UI Conrolling States
+  const [srBtn, setSrBtn] = useState(false);
+  const [btBtn, setbtBtn] = useState(false);
+
   const { t, i18n } = useTranslation();
+  const handleButtonClick = (type) => {
+    setBloodType(type);
+  };
+  const handleSrButtonClick = (type) => {
+    setSexualRelationType(type);
+  };
   return (
     <AppLayout>
-      <div className="container w-fit pt-20 flex justify-center items-center flex-col">
-        <img className="fixed top-[19rem] -z-50" src={loginDrop} alt="" />
+      <div
+        className={
+          i18n.language === "ar"
+            ? "container w-fit flex flex-col pt-20 justify-center items-center text-arabic"
+            : "container w-fit flex flex-col pt-20 justify-center items-center text-latin"
+        }
+      >
+        <img
+          className={
+            i18n.language === "ar"
+              ? "fixed top-[19rem] left-[42%]  -z-50"
+              : "fixed top-[19rem] -z-50"
+          }
+          src={loginDrop}
+          alt=""
+        />
         {/* Steps Tracker */}
-        <div className="mb-4 flex justify-center items-center">
+        <div
+          className={
+            i18n.language === "ar"
+              ? "mb-4 flex flex-row-reverse justify-center items-center "
+              : "mb-4 flex flex-row justify-center items-center text-latin"
+          }
+        >
           {/* Step 1 */}
-          <div className="bg-red text-white p-3 text-sm rounded-full w-4 h-4 flex justify-center items-center">
+          <div className="bg-red  text-white p-3 text-sm rounded-full w-4 h-4 flex justify-center items-center">
             <p>1</p>
           </div>
           <div
@@ -78,7 +118,7 @@ const Login = () => {
                 : "text-5xl mb-8 text-center  text-latin"
             }
           >
-            Create Your Account
+            {t("signup.steps.step1")}
           </h1>
         ) : steps === 2 ? (
           <h1
@@ -88,7 +128,7 @@ const Login = () => {
                 : "text-5xl mb-8 text-center  text-latin"
             }
           >
-            Enter Your Personal Informations
+            {t("signup.steps.step2")}
           </h1>
         ) : steps === 3 ? (
           <h1
@@ -98,7 +138,7 @@ const Login = () => {
                 : "text-5xl mb-8 text-center  text-latin"
             }
           >
-            Select Your Role
+            {t("signup.steps.step3")}
           </h1>
         ) : (
           <h1
@@ -108,7 +148,7 @@ const Login = () => {
                 : "text-5xl mb-8 text-center  text-latin"
             }
           >
-            Create Your Account
+            {t("signup.steps.step4")}
           </h1>
         )}
         {steps === 1 ? (
@@ -119,14 +159,14 @@ const Login = () => {
               <input
                 class="outline-none w-full"
                 type="text"
-                placeholder="name@example.com"
+                placeholder={t("signup.placeholders.email")}
               />
             </div>
 
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <LockClosedIcon className="w-6" />
               <input
-                placeholder="Password"
+                placeholder={t("signup.placeholders.password")}
                 type={!pwVisible ? "text" : "Password"}
                 class="outline-none w-full"
               />
@@ -149,7 +189,7 @@ const Login = () => {
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <LockClosedIcon className="w-6" />
               <input
-                placeholder="Confirm Password"
+                placeholder={t("signup.placeholders.confirmPassword")}
                 type={!pwVisible ? "text" : "Password"}
                 class="outline-none w-full"
               />
@@ -178,14 +218,14 @@ const Login = () => {
               <input
                 class="outline-none w-full"
                 type="text"
-                placeholder="Name"
+                placeholder={t("signup.placeholders.name")}
               />
             </div>
 
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <PhoneIcon className="w-6" />
               <input
-                placeholder="Phone Number"
+                placeholder={t("signup.placeholders.phoneNumber")}
                 type="number"
                 class="outline-none w-full"
               />
@@ -201,7 +241,7 @@ const Login = () => {
                     : "bg-white p-4 rounded-xl h-fit flex justify-center items-center gap-2 w-full border border-red text-red mb-4 hover:bg-red cursor-pointer hover:text-white duration-300"
                 }
               >
-                <p>Male</p>
+                <p>{t("signup.choices.male")}</p>
               </div>
               <div
                 onClick={() => {
@@ -213,7 +253,7 @@ const Login = () => {
                     : "bg-white p-4 rounded-xl h-fit flex justify-center items-center gap-2 w-full border border-red text-red mb-4 hover:bg-red cursor-pointer hover:text-white duration-300"
                 }
               >
-                <p>Female</p>
+                <p>{t("signup.choices.female")}</p>
               </div>
             </div>
           </div>
@@ -233,7 +273,7 @@ const Login = () => {
                 }
               >
                 <img className="" src={donorIllu} alt="" />
-                <p className="text-red text-xl">Donor</p>
+                <p className="text-red text-xl">{t("signup.choices.donor")}</p>
               </div>
               {/* Medical Center */}
               <div
@@ -247,30 +287,230 @@ const Login = () => {
                 }
               >
                 <img className="" src={medicalcenterIllu} alt="" />
-                <p className="text-red text-xl">Medical Center</p>
+                <p className="text-red text-xl">
+                  {t("signup.choices.medicalClinic")}
+                </p>
               </div>
             </div>
           </div>
         ) : (
-          <div className="w-[26rem]">
+          <div className="w-[26rem] fade-in-up">
             {/* -------------------- Step 4 -------------------- */}
             {userType === "donor" ? (
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-                <EnvelopeIcon className="w-6" />
-                <input
-                  class="outline-none w-full"
-                  type="text"
-                  placeholder="name@example.com"
-                />
+              <div>
+                {/* ----- Donor Fields -----  */}
+                {/* Blood Type */}
+                <div
+                  onClick={() => {
+                    setSrBtn(false);
+                    setbtBtn(!btBtn);
+                  }}
+                  className={
+                    btBtn
+                      ? "relative cursor-pointer bg-red  duration-300 text-white  p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red  mb-4"
+                      : "relative cursor-pointer hover:px-6 hover:bg-red duration-300 hover:text-white bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4"
+                  }
+                >
+                  {bloodType === null ? (
+                    <p>{t("signup.choices.bloodType")}</p>
+                  ) : (
+                    <p>
+                      {t("signup.choices.bloodType")} : {bloodType}
+                    </p>
+                  )}
+                  {i18n.language === "ar" ? (
+                    <ChevronLeftIcon className="w-6" />
+                  ) : (
+                    <ChevronRightIcon className="w-6" />
+                  )}
+                  {btBtn ? (
+                    <div className="bg-white border-red text-red absolute -right-28 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-8 gap-2 fade-in-left-to-right">
+                      <button
+                        className={
+                          bloodType === "A+"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("A+")}
+                      >
+                        A+
+                      </button>
+                      <button
+                        className={
+                          bloodType === "A-"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("A-")}
+                      >
+                        A-
+                      </button>
+                      <button
+                        className={
+                          bloodType === "B+"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("B+")}
+                      >
+                        B+
+                      </button>
+                      <button
+                        className={
+                          bloodType === "B-"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("B-")}
+                      >
+                        B-
+                      </button>
+                      <button
+                        className={
+                          bloodType === "AB+"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("AB+")}
+                      >
+                        AB+
+                      </button>
+                      <button
+                        className={
+                          bloodType === "AB-"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("AB-")}
+                      >
+                        AB-
+                      </button>
+                      <button
+                        className={
+                          bloodType === "O+"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("O+")}
+                      >
+                        O+
+                      </button>
+                      <button
+                        className={
+                          bloodType === "O-"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleButtonClick("O-")}
+                      >
+                        O-
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+                {/* Sexual Relationship Type */}
+                <div
+                  onClick={() => {
+                    setbtBtn(false);
+                    setSrBtn(!srBtn);
+                  }}
+                  className={
+                    srBtn
+                      ? "relative cursor-pointer bg-red  duration-300 text-white  p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red  mb-4"
+                      : "relative cursor-pointer hover:px-6 hover:bg-red duration-300 hover:text-white bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4"
+                  }
+                >
+                  {sexualRelationType === null ? (
+                    <p>{t("signup.choices.bloodType")}</p>
+                  ) : (
+                    <p>
+                      {t("signup.choices.sexualRelationships")} :{" "}
+                      {sexualRelationType}
+                    </p>
+                  )}
+                  {i18n.language === "ar" ? (
+                    <ChevronLeftIcon className="w-6" />
+                  ) : (
+                    <ChevronRightIcon className="w-6" />
+                  )}
+                  {srBtn ? (
+                    <div className="bg-white border-red text-red absolute -right-44 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-4 gap-2 fade-in-left-to-right">
+                      <button
+                        className={
+                          sexualRelationType === "Marital"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleSrButtonClick("Marital")}
+                      >
+                        {t("signup.marriageType.maritial")}
+                      </button>
+                      <button
+                        className={
+                          sexualRelationType === "Premarital"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleSrButtonClick("Premarital")}
+                      >
+                        {t("signup.marriageType.preMaritial")}
+                      </button>
+                      <button
+                        className={
+                          sexualRelationType === "Casual"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleSrButtonClick("Casual")}
+                      >
+                        {t("signup.marriageType.casual")}
+                      </button>
+                      <button
+                        className={
+                          sexualRelationType === "Polyamorous"
+                            ? "py-2 px-6 border-red border rounded-lg bg-red text-white duration-300"
+                            : "py-2 px-6 border-red border rounded-lg hover:bg-red hover:text-white duration-300"
+                        }
+                        onClick={() => handleSrButtonClick("Polyamorous")}
+                      >
+                        {t("signup.marriageType.polyamorous")}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+                {/* Have Blood Related Diseases */}
+                <div
+                  onClick={() => {
+                    setGotDiseases(!gotDiseases);
+                  }}
+                  className={
+                    gotDiseases
+                      ? "bg-red text-white p-4 cursor-pointer rounded-xl flex justify-between items-center gap-2 w-full border border-red  mb-4"
+                      : "bg-white p-4 cursor-pointer rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4 hover:bg-red hover:text-white hover:px-6 duration-300"
+                  }
+                >
+                  <p>{t("signup.choices.haveBloodRelatedDiseases")}</p>
+                  {gotDiseases ? <CheckIcon className="w-6" /> : null}
+                </div>
               </div>
             ) : (
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-                <EnvelopeIcon className="w-6" />
-                <input
-                  class="outline-none w-full"
-                  type="text"
-                  placeholder="name@example.com"
-                />
+              <div>
+                <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+                  <IdentificationIcon className="w-6" />
+                  <input
+                    type="text"
+                    className="w-full outline-none text-red"
+                    placeholder={t("signup.placeholders.clinicName")}
+                  />
+                </div>
+                <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+                  <MapPinIcon className="w-6" />
+                  <input
+                    type="text"
+                    className="w-full outline-none text-red"
+                    placeholder={t("signup.placeholders.clinicAddress")}
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -289,10 +529,20 @@ const Login = () => {
                 : "mt-4 max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
             }
           >
-            <h1>Continue</h1>
+            <h1
+              className={i18n.language === "ar" ? "text-arabic" : "text-latin"}
+            >
+              {t("signup.buttons.continue")}
+            </h1>
           </button>
         ) : (
-          <div className="min-w-[26rem] grid grid-cols-6 gap-2 grid-rows-1 mt-4">
+          <div
+            className={
+              i18n.language === "ar"
+                ? "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4 text-arabic"
+                : "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4"
+            }
+          >
             <button
               onClick={() => {
                 if (steps > 1) {
@@ -301,7 +551,11 @@ const Login = () => {
               }}
               className="bg-transparent text-red flex justify-center items-center border border-red rounded-lg hover:bg-red hover:text-white duration-300"
             >
-              <ArrowLeftIcon className="w-6" />
+              {i18n.language === "ar" ? (
+                <ArrowRightIcon className="w-6" />
+              ) : (
+                <ArrowLeftIcon className="w-6" />
+              )}
             </button>
             <button
               onClick={() => {
@@ -316,7 +570,13 @@ const Login = () => {
                   : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
               }
             >
-              <h1>Continue</h1>
+              <h1
+                className={
+                  i18n.language === "ar" ? "text-arabic" : "text-latin"
+                }
+              >
+                {t("signup.buttons.continue")}
+              </h1>
             </button>
           </div>
         )}

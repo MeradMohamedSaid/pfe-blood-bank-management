@@ -49,10 +49,21 @@ const LandingPage = () => {
             </h1>
             <p className="mt-4 opacity-80">{t("landingpage.content")}</p>
             {/* Center Search */}
-            <div className="flex justify-between items-center mt-10 gap-2">
-              <div className="bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer">
+            <div className=" flex justify-between items-center mt-10 gap-2">
+              <div className="relative bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer">
                 <p>{t("landingpage.findCenter")}</p>
                 <ChevronDownIcon class="h-6 w-6 " />
+                <div className="absolute top-16 w-full left-0 p-2 px-4 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
+                  <p className=" mb-2 border-b hover:border-red duration-300 ">
+                    Medical Center 1
+                  </p>
+                  <p className=" mb-2 border-b hover:border-red duration-300 ">
+                    Medical Center 1
+                  </p>
+                  <p className=" mb-2 border-b hover:border-red duration-300 ">
+                    Medical Center 1
+                  </p>
+                </div>
               </div>
               <button className="bg-red text-white py-4 px-6 rounded-full min-w-fit hover:bg-opacity-80 duration-300">
                 {t("landingpage.startJourney")}

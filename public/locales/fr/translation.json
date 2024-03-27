@@ -25,5 +25,40 @@
     "notDonor": "Pas encore un donateur ?",
     "welcome": "Nous vous attendions avec impatience",
     "donor": "Donateurs"
+  },
+  "signup": {
+    "steps": {
+      "step1": "Créez votre compte",
+      "step2": "Entrez vos informations personnelles",
+      "step3": "Sélectionnez votre rôle",
+      "step4": "Remplissez vos informations"
+    },
+    "placeholders": {
+      "email": "nom@example.com",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "name": "Nom",
+      "phoneNumber": "Numéro de téléphone",
+      "clinicName": "Nom de la clinique",
+      "clinicAddress": "Adresse de la clinique"
+    },
+    "buttons": {
+      "continue": "Continuer"
+    },
+    "choices": {
+      "bloodType": "Groupe sanguin",
+      "sexualRelationships": "Relations sexuelles",
+      "haveBloodRelatedDiseases": "Avez-vous des maladies liées au sang ?",
+      "male": "Homme",
+      "female": "Femme",
+      "donor": "Donneur",
+      "medicalClinic": "Clinique médicale"
+    },
+    "marriageType": {
+      "maritial": "Mariage",
+      "preMaritial": "Pré-mariage",
+      "casual": "Décontracté",
+      "polyamorous": "Polyamoureux"
+    }
   }
 }

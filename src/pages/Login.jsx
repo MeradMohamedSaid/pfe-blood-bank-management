@@ -8,6 +8,7 @@ import {
 import { useTranslation } from "react-i18next";
 import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [pwVisible, setPwVisible] = useState("false");
   const { t, i18n } = useTranslation();
@@ -47,7 +48,7 @@ const Login = () => {
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <LockClosedIcon className="w-6" />
               <input
-              placeholder="Password"
+                placeholder="Password"
                 type={!pwVisible ? "text" : "Password"}
                 class="outline-none w-full"
               />
@@ -77,9 +78,12 @@ const Login = () => {
           >
             <h1>{t("login.login")}</h1>
           </button>
-          <p className="text-red underline mt-2 text-sm cursor-pointer">
+          <Link
+            to="/signup"
+            className="text-red underline mt-2 text-sm cursor-pointer"
+          >
             {t("login.notDonor")}
-          </p>
+          </Link>
         </div>
       </div>
     </AppLayout>

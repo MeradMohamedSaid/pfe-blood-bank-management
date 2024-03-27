@@ -53,15 +53,21 @@ const LandingPage = () => {
               <div className="relative bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer">
                 <p>{t("landingpage.findCenter")}</p>
                 <ChevronDownIcon class="h-6 w-6 " />
-                <div className="absolute top-16 w-full left-0 p-2 px-4 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
-                  <p className=" mb-2 border-b hover:border-red duration-300 ">
+                <div className="absolute top-16 overflow-hidden w-full left-0 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
+                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
                     Medical Center 1
                   </p>
-                  <p className=" mb-2 border-b hover:border-red duration-300 ">
-                    Medical Center 1
+                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
+                    Medical Center 2
                   </p>
-                  <p className=" mb-2 border-b hover:border-red duration-300 ">
-                    Medical Center 1
+                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
+                    Medical Center 3
+                  </p>
+                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
+                    Medical Center 4
+                  </p>
+                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
+                    Medical Center 5
                   </p>
                 </div>
               </div>

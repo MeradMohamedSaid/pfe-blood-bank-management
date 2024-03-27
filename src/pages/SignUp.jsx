@@ -5,13 +5,18 @@ import {
   EyeIcon,
   EyeSlashIcon,
   ArrowLeftIcon,
+  IdentificationIcon,
+  PhoneIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";
+import donorIllu from "../assets/donor.png";
+import medicalcenterIllu from "../assets/medicalcenter.png";
 const Login = () => {
   const [steps, setSteps] = useState(1);
   const [pwVisible, setPwVisible] = useState("false");
+  const [userGender, setUserGender] = useState("");
   const { t, i18n } = useTranslation();
   return (
     <AppLayout>
@@ -64,17 +69,50 @@ const Login = () => {
           </div>
         </div>
 
-        <h1
-          className={
-            i18n.language === "ar"
-              ? "text-5xl mb-8 text-center  text-arabic"
-              : "text-5xl mb-8 text-center  text-latin"
-          }
-        >
-          Create Your Account
-        </h1>
+        {steps === 1 ? (
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl mb-8 text-center  text-arabic"
+                : "text-5xl mb-8 text-center  text-latin"
+            }
+          >
+            Create Your Account
+          </h1>
+        ) : steps === 2 ? (
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl mb-8 text-center  text-arabic"
+                : "text-5xl mb-8 text-center  text-latin"
+            }
+          >
+            Enter Your Personal Informations
+          </h1>
+        ) : steps === 3 ? (
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl mb-8 text-center  text-arabic"
+                : "text-5xl mb-8 text-center  text-latin"
+            }
+          >
+            Select Your Role
+          </h1>
+        ) : (
+          <h1
+            className={
+              i18n.language === "ar"
+                ? "text-5xl mb-8 text-center  text-arabic"
+                : "text-5xl mb-8 text-center  text-latin"
+            }
+          >
+            Create Your Account
+          </h1>
+        )}
         {steps === 1 ? (
           <div className="w-[26rem]">
+            {/* -------------------- Step 1 -------------------- */}
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <EnvelopeIcon className="w-6" />
               <input
@@ -133,122 +171,68 @@ const Login = () => {
           </div>
         ) : steps === 2 ? (
           <div className="w-[26rem]">
+            {/* -------------------- Step 2 -------------------- */}
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <EnvelopeIcon className="w-6" />
+              <IdentificationIcon className="w-6" />
               <input
                 class="outline-none w-full"
                 type="text"
-                placeholder="name@example.com"
+                placeholder="Name"
               />
             </div>
 
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <LockClosedIcon className="w-6" />
+              <PhoneIcon className="w-6" />
               <input
-                placeholder="Password"
-                type={!pwVisible ? "text" : "Password"}
+                placeholder="Phone Number"
+                type="number"
                 class="outline-none w-full"
               />
-              {pwVisible ? (
-                <EyeIcon
-                  onClick={() => {
-                    setPwVisible(false);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              ) : (
-                <EyeSlashIcon
-                  onClick={() => {
-                    setPwVisible(true);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              )}
             </div>
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <LockClosedIcon className="w-6" />
-              <input
-                placeholder="Confirm Password"
-                type={!pwVisible ? "text" : "Password"}
-                class="outline-none w-full"
-              />
-              {pwVisible ? (
-                <EyeIcon
-                  onClick={() => {
-                    setPwVisible(false);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              ) : (
-                <EyeSlashIcon
-                  onClick={() => {
-                    setPwVisible(true);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              )}
+            <div className="grid grid-cols-2 gap-4">
+              <div
+                onClick={() => {
+                  setUserGender("m");
+                }}
+                className={
+                  userGender === "m"
+                    ? "p-4 rounded-xl flex justify-center items-center gap-2 w-full border border-red bg-red h-fit text-white duration-300 cursor-not-allowed"
+                    : "bg-white p-4 rounded-xl h-fit flex justify-center items-center gap-2 w-full border border-red text-red mb-4 hover:bg-red cursor-pointer hover:text-white duration-300"
+                }
+              >
+                <p>Male</p>
+              </div>
+              <div
+                onClick={() => {
+                  setUserGender("f");
+                }}
+                className={
+                  userGender === "f"
+                    ? "p-4 rounded-xl flex justify-center items-center gap-2 w-full border border-red bg-red h-fit text-white duration-300 cursor-not-allowed"
+                    : "bg-white p-4 rounded-xl h-fit flex justify-center items-center gap-2 w-full border border-red text-red mb-4 hover:bg-red cursor-pointer hover:text-white duration-300"
+                }
+              >
+                <p>Female</p>
+              </div>
             </div>
           </div>
         ) : steps === 3 ? (
-          <div className="w-[26rem]">
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <EnvelopeIcon className="w-6" />
-              <input
-                class="outline-none w-full"
-                type="text"
-                placeholder="name@example.com"
-              />
-            </div>
-
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <LockClosedIcon className="w-6" />
-              <input
-                placeholder="Password"
-                type={!pwVisible ? "text" : "Password"}
-                class="outline-none w-full"
-              />
-              {pwVisible ? (
-                <EyeIcon
-                  onClick={() => {
-                    setPwVisible(false);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              ) : (
-                <EyeSlashIcon
-                  onClick={() => {
-                    setPwVisible(true);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              )}
-            </div>
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-              <LockClosedIcon className="w-6" />
-              <input
-                placeholder="Confirm Password"
-                type={!pwVisible ? "text" : "Password"}
-                class="outline-none w-full"
-              />
-              {pwVisible ? (
-                <EyeIcon
-                  onClick={() => {
-                    setPwVisible(false);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              ) : (
-                <EyeSlashIcon
-                  onClick={() => {
-                    setPwVisible(true);
-                  }}
-                  className="w-6 cursor-pointer"
-                />
-              )}
+          <div className="w-[40rem]">
+            {/* -------------------- Step 3 -------------------- */}
+            <div className="grid grid-cols-2 gap-8 mb-8">
+              <div className="bg-white border hover:border-red hover:p-10 hover:-translate-y-4 cursor-pointer border-2 duration-300 rounded-xl p-8 flex justify-center items-center flex-col">
+                <img className="" src={donorIllu} alt="" />
+                <p className="text-red text-xl">Donor</p>
+              </div>
+              <div className="bg-white border hover:border-red hover:p-10 hover:-translate-y-4 cursor-pointer border-2 duration-300 rounded-xl p-8 flex justify-center items-center flex-col">
+                <img className="" src={medicalcenterIllu} alt="" />
+                <p className="text-red text-xl">Medical Center</p>
+              </div>
             </div>
           </div>
         ) : (
           <div className="w-[26rem]">
+            {/* -------------------- Step 4 -------------------- */}
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <EnvelopeIcon className="w-6" />
               <input

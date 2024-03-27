@@ -47,6 +47,7 @@ const Login = () => {
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <LockClosedIcon className="w-6" />
               <input
+              placeholder="Password"
                 type={!pwVisible ? "text" : "Password"}
                 class="outline-none w-full"
               />

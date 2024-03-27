@@ -24,15 +24,17 @@ const Navbar = () => {
   return (
     <div className="max-w-[1400px] mx-auto flex items-center justify-between">
       {/* Nav Bar */}
-      <div className="flex justify-center items-center w-fit py-4">
-        <img className="w-16" src={logo} alt="LifeFlow Logo" />
-        <h1 className="text-3xl font-bold">LifeFlow</h1>
-      </div>
-
+      <Link to="/">
+        <div className="flex justify-center items-center w-fit py-4">
+          <img className="w-16" src={logo} alt="LifeFlow Logo" />
+          <h1 className="text-3xl font-bold">LifeFlow</h1>
+        </div>
+      </Link>
       <div className="flex justify-center items-center gap-4">
         {/* Buttons */}
         <div className="flex justify-center items-center gap-2">
-          <button
+          <Link
+            to="/login"
             className={
               i18n.language === "ar"
                 ? "rounded-full border hover:bg-red hover:text-white duration-300 py-2 px-4 text-red border-red text-arabic"
@@ -40,8 +42,9 @@ const Navbar = () => {
             }
           >
             {t("navbar.logIn")}
-          </button>
-          <button
+          </Link>
+          <Link
+            to="/signup"
             className={
               i18n.language === "ar"
                 ? "rounded-full border hover:border-red py-2 px-4 bg-red text-white border-red hover:bg-opacity-70 duration-700 text-arabic"
@@ -49,7 +52,7 @@ const Navbar = () => {
             }
           >
             {t("navbar.signUp")}
-          </button>
+          </Link>
         </div>
         <div className="grid  grid-cols-3 gap-2">
           {/* Icons */}

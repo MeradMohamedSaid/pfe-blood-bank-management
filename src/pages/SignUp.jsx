@@ -19,19 +19,27 @@ import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";
 import donorIllu from "../assets/donor.png";
 import medicalcenterIllu from "../assets/medicalcenter.png";
-const Login = () => {
+import { use } from "i18next";
+const SignUp = () => {
   const [steps, setSteps] = useState(1);
   const [pwVisible, setPwVisible] = useState("false");
   // Data Grabbers
+  const [userEmail, setUserEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVerification, setPasswordVerification] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
+  const [clinicName, setClinicName] = useState("");
+  const [clinicAddress, setClinicAddress] = useState();
   const [userGender, setUserGender] = useState("");
   const [userType, setUserType] = useState("");
   const [bloodType, setBloodType] = useState("");
   const [sexualRelationType, setSexualRelationType] = useState("");
   const [gotDiseases, setGotDiseases] = useState(false);
   // UI Conrolling States
+  const [canContinue, setCanContinue] = useState();
   const [srBtn, setSrBtn] = useState(false);
   const [btBtn, setbtBtn] = useState(false);
-
   const { t, i18n } = useTranslation();
   const handleButtonClick = (type) => {
     setBloodType(type);
@@ -39,6 +47,35 @@ const Login = () => {
   const handleSrButtonClick = (type) => {
     setSexualRelationType(type);
   };
+  const handleEmailChange = (event) => {
+    // Capture email input value and update state
+    setUserEmail(event.target.value);
+  };
+  const handlePasswordChange = (event) => {
+    // Capture password input value and update state
+    setPassword(event.target.value);
+  };
+  const handlePasswordVerificationChange = (event) => {
+    // Capture password verification input value and update state
+    setPasswordVerification(event.target.value);
+  };
+  const handleNameChange = (event) => {
+    // Capture name input value and update state
+    setUserName(event.target.value);
+  };
+  const handlePhoneNumberChange = (event) => {
+    // Capture phone number input value and update state
+    setUserPhoneNumber(event.target.value);
+  };
+  const handleClinicNameChange = (event) => {
+    // Capture clinic name input value and update state
+    setClinicName(event.target.value);
+  };
+  const handleClinicAddressChange = (event) => {
+    // Capture clinic address input value and update state
+    setClinicAddress(event.target.value);
+  };
+
   return (
     <AppLayout>
       <div
@@ -61,7 +98,7 @@ const Login = () => {
         <div
           className={
             i18n.language === "ar"
-              ? "mb-4 flex flex-row-reverse justify-center items-center "
+              ? "mb-4 flex  justify-center items-center "
               : "mb-4 flex flex-row justify-center items-center text-latin"
           }
         >
@@ -160,6 +197,7 @@ const Login = () => {
                 class="outline-none w-full"
                 type="text"
                 placeholder={t("signup.placeholders.email")}
+                onChange={handleEmailChange} // Add onChange handler for email input
               />
             </div>
 
@@ -169,6 +207,7 @@ const Login = () => {
                 placeholder={t("signup.placeholders.password")}
                 type={!pwVisible ? "text" : "Password"}
                 class="outline-none w-full"
+                onChange={handlePasswordChange} // Add onChange handler for password input
               />
               {pwVisible ? (
                 <EyeIcon
@@ -191,7 +230,8 @@ const Login = () => {
               <input
                 placeholder={t("signup.placeholders.confirmPassword")}
                 type={!pwVisible ? "text" : "Password"}
-                class="outline-none w-full"
+                className="outline-none w-full"
+                onChange={handlePasswordVerificationChange} // Add onChange handler for password verification input
               />
               {pwVisible ? (
                 <EyeIcon
@@ -219,6 +259,7 @@ const Login = () => {
                 class="outline-none w-full"
                 type="text"
                 placeholder={t("signup.placeholders.name")}
+                onChange={handleNameChange} // Add onChange handler for name input
               />
             </div>
 
@@ -228,6 +269,7 @@ const Login = () => {
                 placeholder={t("signup.placeholders.phoneNumber")}
                 type="number"
                 class="outline-none w-full"
+                onChange={handlePhoneNumberChange} // Add onChange handler for phone number input
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -324,7 +366,13 @@ const Login = () => {
                     <ChevronRightIcon className="w-6" />
                   )}
                   {btBtn ? (
-                    <div className="bg-white border-red text-red absolute -right-28 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-8 gap-2 fade-in-left-to-right">
+                    <div
+                      className={
+                        i18n.language === "ar"
+                          ? "bg-white border-red text-red absolute -left-28 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-8 gap-2 fade-in-left-to-right"
+                          : "bg-white border-red text-red absolute -right-28 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-8 gap-2 fade-in-left-to-right"
+                      }
+                    >
                       <button
                         className={
                           bloodType === "A+"
@@ -434,7 +482,13 @@ const Login = () => {
                     <ChevronRightIcon className="w-6" />
                   )}
                   {srBtn ? (
-                    <div className="bg-white border-red text-red absolute -right-44 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-4 gap-2 fade-in-left-to-right">
+                    <div
+                      className={
+                        i18n.language === "ar"
+                          ? "bg-white border-red text-red absolute -left-52 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-4 gap-2 fade-in-left-to-right"
+                          : "bg-white border-red text-red absolute -right-44 top-0 p-2 border rounded-lg grid grid-cols-1 grid-rows-4 gap-2 fade-in-left-to-right"
+                      }
+                    >
                       <button
                         className={
                           sexualRelationType === "Marital"
@@ -501,6 +555,7 @@ const Login = () => {
                     type="text"
                     className="w-full outline-none text-red"
                     placeholder={t("signup.placeholders.clinicName")}
+                    onChange={handleClinicNameChange} // Add onChange handler for clinic name input
                   />
                 </div>
                 <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
@@ -509,6 +564,7 @@ const Login = () => {
                     type="text"
                     className="w-full outline-none text-red"
                     placeholder={t("signup.placeholders.clinicAddress")}
+                    onChange={handleClinicAddressChange} // Add onChange handler for clinic address input
                   />
                 </div>
               </div>
@@ -585,4 +641,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

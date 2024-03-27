@@ -1,21 +1,32 @@
+// Importing necessary modules from React and external libraries
 import React, { useState } from "react";
 import {
   EnvelopeIcon,
   LockClosedIcon,
   EyeIcon,
   EyeSlashIcon,
-} from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import loginDrop from "../assets/loginDrop.png";
-import { AppLayout } from "../components/AppLayout";
-import { Link } from "react-router-dom";
+} from "@heroicons/react/24/outline"; // Importing icons for UI
+import { useTranslation } from "react-i18next"; // Importing translation hook
+import loginDrop from "../assets/loginDrop.png"; // Importing image asset
+import { AppLayout } from "../components/AppLayout"; // Importing custom layout component
+import { Link } from "react-router-dom"; // Importing Link component for routing
+
+// Define Login component
 const Login = () => {
+  // State to manage password visibility
   const [pwVisible, setPwVisible] = useState("false");
+
+  // Translation hook
   const { t, i18n } = useTranslation();
+
+  // Render UI
   return (
     <AppLayout>
       <div className="container w-fit pt-20 flex justify-center items-center">
+        {/* Background image */}
         <img className="fixed top-[19rem] -z-50" src={loginDrop} alt="" />
+
+        {/* Login form */}
         <div
           className={
             i18n.language === "ar"
@@ -33,7 +44,8 @@ const Login = () => {
           >
             {t("login.welcome")}
           </h1>
-          {/* Input Field */}
+
+          {/* Input Fields */}
           <div className="w-[26rem]">
             <p className="text-sm mb-2">{t("login.email")}</p>
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
@@ -44,12 +56,13 @@ const Login = () => {
                 placeholder="name@example.com"
               />
             </div>
+
             <p className="text-sm mb-2">{t("login.password")}</p>
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <LockClosedIcon className="w-6" />
               <input
                 placeholder="Password"
-                type={!pwVisible ? "text" : "Password"}
+                type={!pwVisible ? "text" : "Password"} // Toggle password visibility
                 class="outline-none w-full"
               />
               {pwVisible ? (
@@ -69,6 +82,8 @@ const Login = () => {
               )}
             </div>
           </div>
+
+          {/* Login button */}
           <button
             className={
               i18n.language === "ar"
@@ -78,6 +93,8 @@ const Login = () => {
           >
             <h1>{t("login.login")}</h1>
           </button>
+
+          {/* Link to signup */}
           <Link
             to="/signup"
             className="text-red underline mt-2 text-sm cursor-pointer"
@@ -90,4 +107,5 @@ const Login = () => {
   );
 };
 
+// Exporting Login component as default
 export default Login;

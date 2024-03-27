@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import heroIllu from "../assets/hero-illu.svg";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AppLayout } from "../components/AppLayout";
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
-
+  const [showModal, setShowModal] = useState(false);
+  const [center, setCenter] = useState();
   return (
     <AppLayout>
       <div className="container ">
@@ -50,32 +51,70 @@ const LandingPage = () => {
             <p className="mt-4 opacity-80">{t("landingpage.content")}</p>
             {/* Center Search */}
             <div className=" flex justify-between items-center mt-10 gap-2">
-              <div className="relative bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer">
-                <input type="text" placeholder={t("landingpage.findCenter")} />
+              <div
+                onClick={() => {
+                  setShowModal(!showModal);
+                }}
+                className="relative bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer"
+              >
+                {center == null ? (
+                  <p>{t("landingpage.findCenter")}</p>
+                ) : (
+                  <p>{center}</p>
+                )}
                 <ChevronDownIcon class="h-6 w-6 " />
-                <div className="absolute  top-16 overflow-y-auto h-40 w-full left-0 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 1
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 2
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 3
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 4
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 5
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 6
-                  </p>
-                  <p className="py-2 px-4 hover:bg-red-50 duration-300">
-                    Medical Center 7
-                  </p>
-                </div>
+                {showModal ? (
+                  <div className="absolute top-16 overflow-y-auto h-40 w-full left-0 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 1");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 1
+                    </p>
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 2");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 2
+                    </p>
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 3");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 3
+                    </p>
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 4");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 4
+                    </p>
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 5");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 5
+                    </p>
+                    <p
+                      onClick={() => {
+                        setCenter("Medical Center 6");
+                      }}
+                      className="py-2 px-4 hover:bg-red-50 duration-300"
+                    >
+                      Medical Center 6
+                    </p>
+                  </div>
+                ) : null}
               </div>
               <button className="bg-red text-white py-4 px-6 rounded-full min-w-fit hover:bg-opacity-80 duration-300">
                 {t("landingpage.startJourney")}

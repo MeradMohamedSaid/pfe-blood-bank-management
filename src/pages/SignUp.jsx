@@ -36,6 +36,13 @@ const SignUp = () => {
   const [bloodType, setBloodType] = useState("");
   const [sexualRelationType, setSexualRelationType] = useState("");
   const [gotDiseases, setGotDiseases] = useState(false);
+  // Validation States
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [nameValid, setNameValid] = useState(false);
+  const [phoneNumberValid, setPhoneNumberValid] = useState(false);
+  const [clinicNameValid, setClinicNameValid] = useState(false);
+  const [clinicAddressValid, setClinicAddressValid] = useState(false);
   // UI Conrolling States
   const [canContinue, setCanContinue] = useState();
   const [srBtn, setSrBtn] = useState(false);
@@ -48,32 +55,49 @@ const SignUp = () => {
     setSexualRelationType(type);
   };
   const handleEmailChange = (event) => {
-    // Capture email input value and update state
-    setUserEmail(event.target.value);
+    const email = event.target.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(email);
+    setUserEmail(email);
+    setEmailValid(isValid);
   };
+
   const handlePasswordChange = (event) => {
-    // Capture password input value and update state
     setPassword(event.target.value);
   };
   const handlePasswordVerificationChange = (event) => {
-    // Capture password verification input value and update state
-    setPasswordVerification(event.target.value);
+    const passwordVerification = event.target.value;
+    const currentPassword = password;
+    const isValid = passwordVerification === currentPassword;
+    setPasswordVerification(passwordVerification);
+    setPasswordValid(isValid);
   };
+
   const handleNameChange = (event) => {
-    // Capture name input value and update state
     setUserName(event.target.value);
+    if (userName != null) {
+      setNameValid(true);
+    }
   };
   const handlePhoneNumberChange = (event) => {
-    // Capture phone number input value and update state
-    setUserPhoneNumber(event.target.value);
+    const phoneNumber = event.target.value;
+    const phoneNumberRegex = /^(05|06|07)\d{8}$/;
+    const isValid = phoneNumberRegex.test(phoneNumber);
+    setUserPhoneNumber(phoneNumber);
+    setPhoneNumberValid(isValid);
   };
+
   const handleClinicNameChange = (event) => {
-    // Capture clinic name input value and update state
     setClinicName(event.target.value);
+    if (clinicName != null) {
+      setClinicNameValid(true);
+    }
   };
   const handleClinicAddressChange = (event) => {
-    // Capture clinic address input value and update state
     setClinicAddress(event.target.value);
+    if (clinicAddress != null) {
+      setClinicAddressValid(true);
+    }
   };
 
   return (
@@ -574,6 +598,7 @@ const SignUp = () => {
         {/* Continue Button */}
         {steps === 1 ? (
           <button
+            disabled={emailValid === false && passwordValid === false}
             onClick={() => {
               if (steps < 5) {
                 setSteps(steps + 1);

@@ -13,6 +13,8 @@ import {
 const DonorHistory = () => {
   const [isVerified, setIsVerified] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [filterType, setFilterType] = useState("center"); // Default filter type is "id"
+  const [searchQuery, setSearchQuery] = useState("");
   // table logic
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
@@ -159,6 +161,27 @@ const DonorHistory = () => {
   const goToPage = (page) => {
     setCurrentPage(page);
   };
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+  // Filter items based on the selected filter type and search query
+  const filteredItems = tableData.filter((item) => {
+    if (!searchQuery) return true; // If search query is empty, don't apply search filter
+
+    // Apply search filter based on the selected filter type
+    switch (filterType) {
+      case "id":
+        return item.id.toString().includes(searchQuery);
+      case "center":
+        return item.center.toLowerCase().includes(searchQuery.toLowerCase());
+      case "dateTime":
+        return item.dateTime.includes(searchQuery);
+      case "capacity":
+        return item.capacity.toString().includes(searchQuery);
+      default:
+        return true; // Return true to include all items if filter type is unknown
+    }
+  });
   return (
     <AppLayout>
       <UserNavbar />
@@ -176,6 +199,7 @@ const DonorHistory = () => {
                   className="outline-none bg-transparent"
                   type="text"
                   placeholder="Search..."
+                  onChange={handleChange}
                 />
               </div>
               <div
@@ -189,17 +213,37 @@ const DonorHistory = () => {
               {/* Type of filters */}
               {showFilters ? (
                 <div className="flex justify-center items-center gap-1 fade-in">
-                  <div className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300">
+                  <div
+                    onClick={() => {
+                      setFilterType("id");
+                    }}
+                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                  >
                     <p className="">By Id</p>
                   </div>
-                  <div className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300">
-                    <p className="">By Center</p>
+                  <div
+                    onClick={() => {
+                      setFilterType("");
+                    }}
+                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                  >
+                    <p className="center">By Center</p>
                   </div>
-                  <div className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300">
-                    <p className="">By Date</p>
+                  <div
+                    onClick={() => {
+                      setFilterType("");
+                    }}
+                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                  >
+                    <p className="date">By Date</p>
                   </div>
-                  <div className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300">
-                    <p className="">By Capacity</p>
+                  <div
+                    onClick={() => {
+                      setFilterType("");
+                    }}
+                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                  >
+                    <p className="capacity">By Capacity</p>
                   </div>
                 </div>
               ) : null}
@@ -216,34 +260,32 @@ const DonorHistory = () => {
                 <p className="p-4 font-bold text-xl">Packet capacity</p>
               </div>
               {/* Render table rows */}
-              {[...Array(6)].map((_, index) => {
-                const item = currentItems[index];
-                return (
-                  <div
-                    key={index}
-                    className={`grid grid-cols-4 ${
-                      index % 2 === 0 ? "bg-red-200" : "bg-transparent"
-                    }`}
-                  >
-                    {item ? (
-                      <>
-                        <p className="p-4">{item.id}</p>
-                        <p className="p-4">{item.dateTime}</p>
-                        <p className="p-4">{item.center}</p>
-                        <p className="p-4">{item.capacity}</p>
-                      </>
-                    ) : (
-                      <>
+              {/* Render table rows */}
+              {filteredItems.slice(startIndex, endIndex).map((item, index) => (
+                <div
+                  key={index}
+                  className={`grid grid-cols-4 hover: ${
+                    index % 2 === 0 ? "bg-red-200" : "bg-transparent"
+                  }`}
+                >
+                  {item ? (
+                    <>
+                      <p className="p-4">{item.id}</p>
+                      <p className="p-4">{item.dateTime}</p>
+                      <p className="p-4">{item.center}</p>
+                      <p className="p-4">{item.capacity}</p>
+                    </>
+                  ) : (
+                    <>
                       {/* do not touch :p */}
-                        <p className="p-4">&nbsp;</p>
-                        <p className="p-4">&nbsp;</p>
-                        <p className="p-4">&nbsp;</p>
-                        <p className="p-4">&nbsp;</p>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
+                      <p className="p-4">&nbsp;</p>
+                      <p className="p-4">&nbsp;</p>
+                      <p className="p-4">&nbsp;</p>
+                      <p className="p-4">&nbsp;</p>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
             {/* Render pager */}
             <div className="flex justify-center items-center gap-4">

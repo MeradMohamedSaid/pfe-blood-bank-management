@@ -11,9 +11,9 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 const DonorHistory = () => {
-  const [isVerified, setIsVerified] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filterType, setFilterType] = useState("center"); // Default filter type is "id"
+  const [filterType, setFilterType] = useState("id"); // Default filter type is "id"
   const [searchQuery, setSearchQuery] = useState("");
   // table logic
   const [currentPage, setCurrentPage] = useState(1);
@@ -217,33 +217,49 @@ const DonorHistory = () => {
                     onClick={() => {
                       setFilterType("id");
                     }}
-                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    className={
+                      filterType === "id"
+                        ? "p-2 border border-red rounded-xl flex justify-center items-center gap-1 cursor-pointer bg-red text-white duration-300"
+                        : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    }
                   >
                     <p className="">By Id</p>
                   </div>
                   <div
                     onClick={() => {
-                      setFilterType("");
+                      setFilterType("center");
                     }}
-                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    className={
+                      filterType === "center"
+                        ? "p-2 border border-red rounded-xl flex justify-center items-center gap-1 cursor-pointer bg-red text-white duration-300"
+                        : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    }
                   >
-                    <p className="center">By Center</p>
+                    <p>By Center</p>
                   </div>
                   <div
                     onClick={() => {
-                      setFilterType("");
+                      setFilterType("dateTime");
                     }}
-                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    className={
+                      filterType === "dateTime"
+                        ? "p-2 border border-red rounded-xl flex justify-center items-center gap-1 cursor-pointer bg-red text-white duration-300"
+                        : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    }
                   >
-                    <p className="date">By Date</p>
+                    <p>By Date</p>
                   </div>
                   <div
                     onClick={() => {
-                      setFilterType("");
+                      setFilterType("capacity");
                     }}
-                    className="p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    className={
+                      filterType === "capacity"
+                        ? "p-2 border border-red rounded-xl flex justify-center items-center gap-1 cursor-pointer bg-red text-white duration-300"
+                        : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
+                    }
                   >
-                    <p className="capacity">By Capacity</p>
+                    <p>By Capacity</p>
                   </div>
                 </div>
               ) : null}

@@ -1,19 +1,5 @@
 import React, { useState } from "react";
-import {
-  EnvelopeIcon,
-  LockClosedIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  ArrowLeftIcon,
-  IdentificationIcon,
-  PhoneIcon,
-  ChevronRightIcon,
-  CheckIcon,
-  CheckCircleIcon,
-  MapPinIcon,
-  ArrowRightIcon,
-  ChevronLeftIcon,
-} from "@heroicons/react/24/outline";
+
 import { useTranslation } from "react-i18next";
 import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";

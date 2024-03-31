@@ -17,6 +17,7 @@ import {
   ChevronLeftIcon,
   StarIcon,
   XMarkIcon,
+  ArrowUpTrayIcon,
 } from "@heroicons/react/24/outline";
 const DonnorApplication = () => {
   const [section, setSection] = useState(1);
@@ -33,6 +34,9 @@ const DonnorApplication = () => {
   const [bloodType, setBloodType] = useState("");
   const [sexualRelationType, setSexualRelationType] = useState("");
   const [gotDiseases, setGotDiseases] = useState(false);
+  const [id, setId] = useState(true); // Personal ID
+  const [hpa, setHpa] = useState(null); // Hematological Phenotyping analysis
+  const [stip, setStip] = useState(null); // Sexually Transmitted Infection Profile
   return (
     <AppLayout>
       <UserNavbar />
@@ -79,7 +83,7 @@ const DonnorApplication = () => {
             </p>
           </div>
           {section === 1 ? (
-            <div className="w-[26rem] ">
+            <div className="w-[26rem] fade-in-up">
               <h1 className="text-3xl mb-4 text-center">
                 Provided Informations :
               </h1>
@@ -97,7 +101,7 @@ const DonnorApplication = () => {
               </div>
             </div>
           ) : section === 2 ? (
-            <div className="w-[26rem] ">
+            <div className="w-[26rem] fade-in-up">
               <h1 className="text-3xl mb-4 text-center">
                 Provided Informations :
               </h1>
@@ -111,29 +115,39 @@ const DonnorApplication = () => {
                 Have blood related diseases ?
                 <XMarkIcon className="w-6" />
               </div>
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
+              <div className="hover:px-6 hover:bg-red hover:text-white cursor-pointer duration-300 bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
                 Donation History
                 <ChevronRightIcon className="w-6" />
               </div>
             </div>
           ) : (
-            <div className="w-[26rem] ">
+            <div className="w-[26rem] fade-in-up">
               <h1 className="text-3xl mb-4 text-center">
                 Provided Informations :
               </h1>
-              <div className="bg-white p-4 rounded-xl flex items-center gap-2 w-full border border-red text-red mb-2">
-                <p>Blood Type : O-</p>
+              <div className="hover:px-6 hover:bg-red hover:text-white cursor-pointer duration-300 bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
+                Personal ID
+                {id === null ? (
+                  <ArrowUpTrayIcon className="w-6" />
+                ) : (
+                  <CheckIcon className="w-6" />
+                )}
               </div>
-              <div className="bg-white p-4 rounded-xl flex items-center gap-2 w-full border border-red text-red mb-2">
-                Sexual Relationships : None
+              <div className="hover:px-6 hover:bg-red hover:text-white cursor-pointer duration-300 bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
+                Hematological Phenotyping analysis
+                {hpa === null ? (
+                  <ArrowUpTrayIcon className="w-6" />
+                ) : (
+                  <CheckIcon className="w-6" />
+                )}
               </div>
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
-                Have blood related diseases ?
-                <XMarkIcon className="w-6" />
-              </div>
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
-                Donation History
-                <ChevronRightIcon className="w-6" />
+              <div className="hover:px-6 hover:bg-red hover:text-white cursor-pointer duration-300 bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-2">
+                Sexually Transmitted Infection Profile
+                {stip === null ? (
+                  <ArrowUpTrayIcon className="w-6" />
+                ) : (
+                  <CheckIcon className="w-6" />
+                )}
               </div>
             </div>
           )}

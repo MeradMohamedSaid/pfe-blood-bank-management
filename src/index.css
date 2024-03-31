@@ -47,9 +47,12 @@ body {
   max-width: 1200px;
   margin: auto;
 }
+
 .my-svg-white {
-  fill: white; /* Change the color to your desired color */
+  fill: white;
+  /* Change the color to your desired color */
 }
+
 @layer base {
   .text-red {
     @apply text-[#F0073B]
@@ -108,5 +111,24 @@ body {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  /* Initially transparent */
+  animation: fadeIn 0.3s ease-in forwards;
+  /* Apply animation */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    /* Start from fully transparent */
+  }
+
+  to {
+    opacity: 1;
+    /* End at fully opaque */
   }
 }

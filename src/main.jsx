@@ -13,6 +13,9 @@ import "./i18n";
 import { Suspense } from "react";
 
 import SignUp from "./pages/SignUp.jsx";
+import DonorApplication from "./pages/DApplication.jsx";
+import DonorApp from "./pages/DAppointment.jsx";
+import DonorHistory from "./pages/DHistory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +25,9 @@ const router = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
+  { path: "/donor/application", element: <DonorApplication /> },
+  { path: "/donor/appointment", element: <DonorApp /> },
+  { path: "/donor/history", element: <DonorHistory /> },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

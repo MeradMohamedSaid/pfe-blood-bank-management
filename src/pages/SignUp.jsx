@@ -19,7 +19,8 @@ import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";
 import donorIllu from "../assets/donor.png";
 import medicalcenterIllu from "../assets/medicalcenter.png";
-import { use } from "i18next";
+
+import footerImg from "../assets/footer.png";
 const SignUp = () => {
   const [steps, setSteps] = useState(1);
   const [pwVisible, setPwVisible] = useState("false");
@@ -32,7 +33,7 @@ const SignUp = () => {
   const [clinicName, setClinicName] = useState("");
   const [clinicAddress, setClinicAddress] = useState();
   const [userGender, setUserGender] = useState("");
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState(null);
   const [bloodType, setBloodType] = useState("");
   const [sexualRelationType, setSexualRelationType] = useState("");
   const [gotDiseases, setGotDiseases] = useState(false);
@@ -280,6 +281,7 @@ const SignUp = () => {
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4 ">
               <IdentificationIcon className="w-6" />
               <input
+                value={userName}
                 class="outline-none w-full"
                 type="text"
                 placeholder={t("signup.placeholders.name")}
@@ -290,6 +292,7 @@ const SignUp = () => {
             <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
               <PhoneIcon className="w-6" />
               <input
+                value={userPhoneNumber}
                 placeholder={t("signup.placeholders.phoneNumber")}
                 type="number"
                 class="outline-none w-full"
@@ -576,6 +579,7 @@ const SignUp = () => {
                 <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
                   <IdentificationIcon className="w-6" />
                   <input
+                    value={clinicName}
                     type="text"
                     className="w-full outline-none text-red"
                     placeholder={t("signup.placeholders.clinicName")}
@@ -585,6 +589,7 @@ const SignUp = () => {
                 <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
                   <MapPinIcon className="w-6" />
                   <input
+                    value={clinicAddress}
                     type="text"
                     className="w-full outline-none text-red"
                     placeholder={t("signup.placeholders.clinicAddress")}
@@ -598,16 +603,14 @@ const SignUp = () => {
         {/* Continue Button */}
         {steps === 1 ? (
           <button
-            disabled={emailValid === false && passwordValid === false}
+            disabled={!emailValid || !passwordValid}
             onClick={() => {
-              if (steps < 5) {
-                setSteps(steps + 1);
-              }
+              setSteps(2);
             }}
             className={
-              i18n.language === "ar"
-                ? "mt-4 max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
-                : "mt-4 max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+              !emailValid || !passwordValid
+                ? "mt-4 max-w-[26rem] bg-red opacity-50 cursor-not-allowed text-center text-white w-full py-2 rounded-xl  duration-300 "
+                : "mt-4 max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer"
             }
           >
             <h1
@@ -616,6 +619,90 @@ const SignUp = () => {
               {t("signup.buttons.continue")}
             </h1>
           </button>
+        ) : steps === 2 ? (
+          <div
+            className={
+              i18n.language === "ar"
+                ? "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4 text-arabic"
+                : "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4"
+            }
+          >
+            <button
+              onClick={() => {
+                if (steps > 1) {
+                  setSteps(steps - 1);
+                }
+              }}
+              className="bg-transparent text-red flex justify-center items-center border border-red rounded-lg hover:bg-red hover:text-white duration-300"
+            >
+              {i18n.language === "ar" ? (
+                <ArrowRightIcon className="w-6" />
+              ) : (
+                <ArrowLeftIcon className="w-6" />
+              )}
+            </button>
+            <button
+              disabled={!nameValid || !phoneNumberValid}
+              onClick={() => {
+                setSteps(3);
+              }}
+              className={
+                !nameValid || !phoneNumberValid
+                  ? "col-span-5 bg-red opacity-50 cursor-not-allowed w-full py-2 rounded-xl hover:bg-opacity-70 duration-300  text-arabic"
+                  : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+              }
+            >
+              <h1
+                className={
+                  i18n.language === "ar" ? "text-arabic" : "text-latin"
+                }
+              >
+                {t("signup.buttons.continue")}
+              </h1>
+            </button>
+          </div>
+        ) : steps === 3 ? (
+          <div
+            className={
+              i18n.language === "ar"
+                ? "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4 text-arabic"
+                : "min-w-[26rem]  grid grid-cols-6 gap-2 grid-rows-1 mt-4"
+            }
+          >
+            <button
+              disabled={userType === null}
+              onClick={() => {
+                if (steps > 1) {
+                  setSteps(steps - 1);
+                }
+              }}
+              className="bg-transparent text-red flex justify-center items-center border border-red rounded-lg hover:bg-red hover:text-white duration-300"
+            >
+              {i18n.language === "ar" ? (
+                <ArrowRightIcon className="w-6" />
+              ) : (
+                <ArrowLeftIcon className="w-6" />
+              )}
+            </button>
+            <button
+              onClick={() => {
+                setSteps(4);
+              }}
+              className={
+                i18n.language === "ar"
+                  ? "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
+                  : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+              }
+            >
+              <h1
+                className={
+                  i18n.language === "ar" ? "text-arabic" : "text-latin"
+                }
+              >
+                {t("signup.buttons.continue")}
+              </h1>
+            </button>
+          </div>
         ) : (
           <div
             className={
@@ -641,8 +728,7 @@ const SignUp = () => {
             <button
               onClick={() => {
                 if (steps < 4) {
-                  setSteps(steps + 1);
-                  console.log(steps);
+                  console.log("Login");
                 }
               }}
               className={
@@ -662,6 +748,9 @@ const SignUp = () => {
           </div>
         )}
       </div>
+      <footer className="absolute bottom-0 -z-10">
+        <img src={footerImg} />
+      </footer>
     </AppLayout>
   );
 };

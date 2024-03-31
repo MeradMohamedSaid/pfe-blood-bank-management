@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import heroIllu from "../assets/hero-illu.svg";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AppLayout } from "../components/AppLayout";
+import footerImg from "../assets/footer.png";
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
@@ -127,6 +128,9 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+      <footer className="absolute bottom-0 -z-10">
+        <img src={footerImg} />
+      </footer>
     </AppLayout>
   );
 };

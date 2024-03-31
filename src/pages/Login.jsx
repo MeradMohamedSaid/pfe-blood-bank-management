@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next"; // Importing translation hook
 import loginDrop from "../assets/loginDrop.png"; // Importing image asset
 import { AppLayout } from "../components/AppLayout"; // Importing custom layout component
 import { Link } from "react-router-dom"; // Importing Link component for routing
+import footerImg from "../assets/footer.png";
 
 // Define Login component
 const Login = () => {
@@ -103,6 +104,9 @@ const Login = () => {
           </Link>
         </div>
       </div>
+      <footer className="absolute bottom-0 -z-10">
+        <img src={footerImg} />
+      </footer>
     </AppLayout>
   );
 };

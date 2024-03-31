@@ -47,7 +47,9 @@ body {
   max-width: 1200px;
   margin: auto;
 }
-
+.my-svg-white {
+  fill: white; /* Change the color to your desired color */
+}
 @layer base {
   .text-red {
     @apply text-[#F0073B]

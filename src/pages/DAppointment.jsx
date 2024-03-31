@@ -6,6 +6,7 @@ import heartIllu from "../assets/heartIllu.png";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 const DonnorApp = () => {
   const [isVerified, setIsVerified] = useState(true);
+  const [isAppoinmentSet, setIsAppoinmentSet] = useState(true);
   const [center, setCenter] = useState();
   const [showModal, setShowModal] = useState(false);
   return (
@@ -14,8 +15,11 @@ const DonnorApp = () => {
       <div className="container">
         {!isVerified ? (
           <AppNotice />
+        ) : isAppoinmentSet ? (
+          <div>appoinment set</div>
         ) : (
           <div className="grid grid-cols-2 gap-8 h-[80vh]">
+            {/* when appoinment is still not set */}
             {/* heart image */}
             <div className="flex justify-center items-center">
               <img src={heartIllu} alt="" />

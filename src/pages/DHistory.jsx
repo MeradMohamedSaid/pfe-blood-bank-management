@@ -11,7 +11,7 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 const DonorHistory = () => {
-  const [isVerified, setIsVerified] = useState(false);
+  const [isVerified, setIsVerified] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [filterType, setFilterType] = useState("id"); // Default filter type is "id"
   const [searchQuery, setSearchQuery] = useState("");

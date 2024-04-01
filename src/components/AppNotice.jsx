@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const AppNotice = () => {
   return (
@@ -12,12 +13,15 @@ const AppNotice = () => {
         pace.{" "}
       </p>
       <p>We appreciate your patience.</p>
-      <button className="my-4 bg-red text-white py-4 px-14 hover:bg-opacity-90 duration-300  hover:scale-110 rounded-xl">
+      <Link
+        to="/donor/application"
+        className="my-4 bg-red text-white py-4 px-14 hover:bg-opacity-90 duration-300  rounded-xl"
+      >
         Review Your Application
-      </button>
-      <p className="text-sm text-red hover:underline duration-300 cursor-pointer">
+      </Link>
+      <Link to="/about-us" className="text-sm text-red hover:underline duration-300 cursor-pointer">
         Or find out more About Us!
-      </p>
+      </Link>
     </div>
   );
 };

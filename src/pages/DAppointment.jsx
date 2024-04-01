@@ -16,7 +16,23 @@ const DonnorApp = () => {
         {!isVerified ? (
           <AppNotice />
         ) : isAppoinmentSet ? (
-          <div>appoinment set</div>
+          <div className="h-[80vh] flex justify-center flex-col">
+            <h1 className="text-5xl text-red font-bold mb-4">
+              We're waiting for your visit, User.
+            </h1>
+            <p>
+              Your appointment is scheduled for{" "}
+              <span className="text-red font-bold">Date of Visit</span>
+              . Make sure to mark your calendar and join us on that day.
+            </p>
+            <p>see you in :</p>
+            <h1 className="font-bold text-4xl text-red">
+              X Days, X Hours, X min, X seconds.
+            </h1>
+            <p className="mt-4">
+              Your donation can make a huge difference in saving lives.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-2 gap-8 h-[80vh]">
             {/* when appoinment is still not set */}

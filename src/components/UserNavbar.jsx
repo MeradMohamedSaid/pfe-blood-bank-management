@@ -27,7 +27,7 @@ const UserNavbar = () => {
       </div>
       {/* LogOut and Settings */}
       <div className="mt-auto flex gap-2">
-        <div className="h-fit w-fit p-4 rounded-xl bg-white text-red hover:text-white hover:bg-red hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer">
+        <div className="h-fit w-fit p-4 rounded-xl text-white bg-red hover:scale-110 duration-300 border-red border  cursor-pointer">
           <ArrowLeftStartOnRectangleIcon className="w-6 h-6" />
         </div>
         <div className="h-fit w-fit p-4 rounded-xl bg-white text-red hover:text-white hover:bg-red hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer">

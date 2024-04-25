@@ -17,6 +17,9 @@ import DonorApplication from "./pages/DApplication.jsx";
 import DonorApp from "./pages/DAppointment.jsx";
 import DonorHistory from "./pages/DHistory.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
+import ClinicAppointment from "./pages/CAppointment.jsx";
+import ClinicApplication from "./pages/CApplication.jsx";
+import ClinicHistory from "./pages/CHistory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +33,9 @@ const router = createBrowserRouter([
   { path: "/donor/application", element: <DonorApplication /> },
   { path: "/donor/appointment", element: <DonorApp /> },
   { path: "/donor/history", element: <DonorHistory /> },
+  { path: "/clinic/application", element: <ClinicApplication /> },
+  { path: "/clinic/appointment", element: <ClinicAppointment /> },
+  { path: "/clinic/history", element: <ClinicHistory /> },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

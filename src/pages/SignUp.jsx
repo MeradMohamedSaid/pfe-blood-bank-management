@@ -5,7 +5,19 @@ import loginDrop from "../assets/loginDrop.png";
 import { AppLayout } from "../components/AppLayout";
 import donorIllu from "../assets/donor.png";
 import medicalcenterIllu from "../assets/medicalcenter.png";
-
+import {
+  EnvelopeIcon,
+  LockClosedIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  IdentificationIcon,
+  PhoneIcon,
+  ArrowLeftIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  CheckIcon,
+  MapPinIcon,
+} from "@heroicons/react/24/outline";
 import footerImg from "../assets/footer.png";
 const SignUp = () => {
   const [steps, setSteps] = useState(1);

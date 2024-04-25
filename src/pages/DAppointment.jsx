@@ -23,7 +23,7 @@ const DonnorApp = () => {
             <p>
               Your appointment is scheduled for{" "}
               <span className="text-red font-bold">Date of Visit</span>
-              . Make sure to mark your calendar and join us on that day.
+              .Make sure to mark your calendar and join us on that day.
             </p>
             <p>see you in :</p>
             <h1 className="font-bold text-4xl text-red">

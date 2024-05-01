@@ -16,7 +16,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -27,11 +27,14 @@ h4,
 h5,
 h6 {
   font-family: "Poppins", sans-serif;
-
 }
 
 body {
-  background: linear-gradient(0deg, rgba(255, 221, 228, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 221, 228, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }
 
 .text-arabic {
@@ -41,6 +44,21 @@ body {
 
 .text-latin {
   direction: ltr !important;
+}
+
+.text-arabic-err {
+  font-family: "Noto Kufi Arabic", sans-serif !important;
+  direction: rtl;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  color: rgb(255, 0, 51);
+}
+
+.text-latin-err {
+  direction: ltr !important;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  color: rgb(255, 0, 51);
 }
 
 .container {
@@ -55,43 +73,47 @@ body {
 
 @layer base {
   .text-red {
-    @apply text-[#F0073B]
+    @apply text-[#F0073B];
   }
 
   .bg-red {
-    @apply bg-[#F0073B]
+    @apply bg-[#F0073B];
+  }
+
+  .bg-F4F4F4 {
+    @apply bg-[rgb(242,242,242)];
+  }
+
+  .bg-disable {
+    @apply bg-[#ff7896];
   }
 
   .border-red {
-    @apply border-[#F0073B]
+    @apply border-[#F0073B];
   }
 
   /* Scrollbar styles */
   .custom-scrollbar::-webkit-scrollbar {
-    @apply w-1
+    @apply w-1;
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-white
+    @apply bg-white;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-red rounded-full
+    @apply bg-red rounded-full;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-red bg-opacity-60
+    @apply bg-red bg-opacity-60;
   }
-
-
 }
-
-
 
 .fade-in-up {
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeInUp 1s ease forwards;
+  animation: fadeInUp 0.5s ease forwards;
 }
 
 @keyframes fadeInUp {
@@ -112,6 +134,12 @@ body {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.fade-in-right-to-left {
+  opacity: 0;
+  transform: translateX(10px);
+  animation: fadeInLeftToRight 0.3s ease forwards;
 }
 
 .fade-in {

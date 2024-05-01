@@ -24,7 +24,8 @@
     "login": "Login",
     "notDonor": "Not a donor yet?",
     "welcome": "We've Been Waiting For You",
-    "donor": "Donors"
+    "donor": "Our community members",
+    "wrong": "Sorry , you tried to login with incorrect credentials."
   },
   "signup": {
     "steps": {
@@ -43,7 +44,9 @@
       "clinicAddress": "Clinic Address"
     },
     "buttons": {
-      "continue": "Continue"
+      "continue": "Continue",
+      "signin": "Login",
+      "signup": "Sign Up"
     },
     "choices": {
       "bloodType": "Blood Type",

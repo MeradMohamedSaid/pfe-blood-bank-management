@@ -13,12 +13,18 @@ import {
   IdentificationIcon,
   PhoneIcon,
   ArrowLeftIcon,
+  ArrowRightIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
   CheckIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
 import footerImg from "../assets/footer.png";
+import { useNavigate } from "react-router-dom";
+
+import axios from "axios";
+axios.defaults.withCredentials = true;
+
 const SignUp = () => {
   const [steps, setSteps] = useState(1);
   const [pwVisible, setPwVisible] = useState("false");
@@ -88,14 +94,144 @@ const SignUp = () => {
 
   const handleClinicNameChange = (event) => {
     setClinicName(event.target.value);
-    if (clinicName != null) {
+    if (clinicName != "") {
       setClinicNameValid(true);
     }
   };
   const handleClinicAddressChange = (event) => {
     setClinicAddress(event.target.value);
-    if (clinicAddress != null) {
+    if (clinicAddress != "") {
       setClinicAddressValid(true);
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    const object = {
+      email: userEmail,
+      password: password,
+      name: userName,
+      phone: userPhoneNumber,
+      gender: userGender === "m" ? "m" : "f",
+      role: userType === "donor" ? 2 : 3,
+    };
+    console.table(object);
+    const uid = await signUp(object);
+    console.log(uid);
+    if (uid) {
+      if (userType === "donor") {
+        console.log("Donor Request Table");
+        const donorRequest = {
+          //id: uid,
+          bloodType: bloodType, //string of 3
+          Relations: sexualRelationType === "Marital" ? true : false, //boolean
+          diseases: gotDiseases, //bolean
+        };
+        console.table(donorRequest);
+        await registerDonor(donorRequest);
+        navigate("/donor");
+      } else {
+        console.log("Clinic Request Table");
+        const clinicRequest = {
+          //id: uid,
+          clinicName: clinicName, //string
+          clinicAddress: clinicAddress, //string
+        };
+        console.table(clinicRequest);
+        await registerClinic(clinicRequest);
+        navigate("/clinic");
+      }
+    }
+  };
+
+  // const signUp = async (formData) => {
+  //   try {
+  //     const response = await fetch("http://localhost:3000/signup", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Sign up failed");
+  //     }
+  //     const data = await response.json();
+  //     console.log("Sign up successful:", data);
+  //     return data.userId;
+  //   } catch (error) {
+  //     console.error("Error signing up:", error.message);
+  //   }
+  // };
+
+  const signUp = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/signup",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error(response.data.message || "Sign up failed");
+      }
+
+      console.log("Sign up successful:", response.data);
+      return response.data.session.userId;
+    } catch (error) {
+      console.error("Error signing up:", error.message);
+    }
+  };
+
+  const registerDonor = async (donorData) => {
+    try {
+      const response = await fetch("http://localhost:3000/donorRequest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(donorData),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
+
+      // Handle successful registration
+      const data = await response.json();
+      console.log("Registration successful:", data);
+    } catch (error) {
+      console.error("Error registering donor:", error.message);
+    }
+  };
+
+  const registerClinic = async (ClinicData) => {
+    try {
+      const response = await fetch("http://localhost:3000/receiverRequest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ClinicData),
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
+
+      // Handle successful registration
+      const data = await response.json();
+      console.log("Registration successful:", data);
+    } catch (error) {
+      console.error("Error registering donor:", error.message);
     }
   };
 
@@ -640,13 +776,13 @@ const SignUp = () => {
               )}
             </button>
             <button
-              disabled={!nameValid || !phoneNumberValid}
+              disabled={!nameValid || !phoneNumberValid || userGender === ""}
               onClick={() => {
                 setSteps(3);
               }}
               className={
-                !nameValid || !phoneNumberValid
-                  ? "col-span-5 bg-red opacity-50 cursor-not-allowed w-full py-2 rounded-xl hover:bg-opacity-70 duration-300  text-arabic"
+                !nameValid || !phoneNumberValid || userGender === ""
+                  ? "col-span-5 bg-red opacity-50 cursor-not-allowed w-full py-2 rounded-xl text-white hover:bg-opacity-70 duration-300  text-arabic"
                   : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
               }
             >
@@ -724,15 +860,45 @@ const SignUp = () => {
               )}
             </button>
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (steps < 4) {
                   console.log("Login");
                 }
+                console.log("SignUP");
+                await handleSignUp();
               }}
               className={
-                i18n.language === "ar"
+                userType === "donor"
+                  ? bloodType === "" || sexualRelationType === ""
+                    ? i18n.language === "ar" //true
+                      ? "col-span-5 bg-red opacity-50 text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-not-allowed text-arabic"
+                      : "col-span-5 bg-red opacity-50 text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-not-allowed text-latin"
+                    : i18n.language === "ar" //false
+                    ? "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
+                    : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+                  : clinicName === "" || clinicAddress === ""
+                  ? i18n.language === "ar" //true
+                    ? "col-span-5 bg-red opacity-50 text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-not-allowed text-arabic"
+                    : "col-span-5 bg-red opacity-50 text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-not-allowed text-latin"
+                  : i18n.language === "ar" //false
                   ? "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
                   : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+              }
+              // className={
+
+              //   i18n.language === "ar"
+              //     ? "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
+              //     : "col-span-5 bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+              // }
+              // disabled={!clinicNameValid && !clinicNameValid}
+              disabled={
+                userType === "donor"
+                  ? bloodType === "" || sexualRelationType === ""
+                    ? true
+                    : false
+                  : clinicName === "" || clinicAddress === ""
+                  ? true
+                  : false
               }
             >
               <h1
@@ -740,7 +906,7 @@ const SignUp = () => {
                   i18n.language === "ar" ? "text-arabic" : "text-latin"
                 }
               >
-                {t("signup.buttons.continue")}
+                {t("signup.buttons.signup")}
               </h1>
             </button>
           </div>

@@ -10,7 +10,7 @@ const LandingPage = () => {
   const [center, setCenter] = useState();
   return (
     <AppLayout>
-      <div className="container ">
+      <div className="container">
         <div
           className={
             i18n.language === "ar"
@@ -22,8 +22,8 @@ const LandingPage = () => {
           <div
             className={
               i18n.language === "ar"
-                ? "flex justify-center flex-col col-start-2 text-arabic"
-                : "flex justify-center flex-col text-latin"
+                ? "flex justify-center flex-col col-start-2 text-arabic fade-in-right-to-left"
+                : "flex justify-center flex-col text-latin fade-in-left-to-right"
             }
           >
             {/* Title */}
@@ -56,16 +56,16 @@ const LandingPage = () => {
                 onClick={() => {
                   setShowModal(!showModal);
                 }}
-                className="relative bg-white w-full py-4 px-6 rounded-full flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer"
+                className="relative bg-white w-full py-4 px-6 rounded-xl flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer"
               >
                 {center == null ? (
                   <p>{t("landingpage.findCenter")}</p>
                 ) : (
                   <p>{center}</p>
                 )}
-                <ChevronDownIcon class="h-6 w-6 " />
+                <ChevronDownIcon className="h-6 w-6 " />
                 {showModal ? (
-                  <div className="absolute top-16 overflow-y-auto h-40 w-full left-0 rounded-2xl text-sm bg-white border hover:border-red flex flex-col">
+                  <div className="absolute top-16 overflow-y-auto h-40 w-full left-0 rounded-md text-sm bg-white border hover:border-red flex flex-col">
                     <p
                       onClick={() => {
                         setCenter("Medical Center 1");
@@ -117,18 +117,24 @@ const LandingPage = () => {
                   </div>
                 ) : null}
               </div>
-              <button className="bg-red text-white py-4 px-6 rounded-full min-w-fit hover:bg-opacity-80 duration-300">
+              <button className="bg-red text-white py-4 px-6 rounded-xl min-w-fit hover:bg-opacity-80 duration-300">
                 {t("landingpage.startJourney")}
               </button>
             </div>
           </div>
           {/* Hero Illustration */}
-          <div className={i18n === "ar" ? "col-start-1 row-start-1" : ""}>
+          <div
+            className={
+              i18n === "ar"
+                ? "col-start-1 row-start-1 fade-in-left-to-right"
+                : "fade-in-right-to-left"
+            }
+          >
             <img src={heroIllu} alt="" />
           </div>
         </div>
       </div>
-      <footer className="absolute bottom-0 -z-10">
+      <footer className="absolute bottom-0 -z-10 fade-in-up">
         <img src={footerImg} />
       </footer>
     </AppLayout>

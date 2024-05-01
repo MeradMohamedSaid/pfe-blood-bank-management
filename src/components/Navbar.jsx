@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import arIcon from "../assets/arIcon.png";
 import frIcon from "../assets/frIcon.png";
@@ -11,7 +11,9 @@ import {
   UserIcon,
 } from "@heroicons/react/24/outline";
 
-const Navbar = () => {
+import axios from "axios";
+
+const Navbar = ({ loggedIn, role }) => {
   const [lang, setLang] = useState("en");
   const [showDropdown, setShowDropdown] = useState(false);
   const { t, i18n } = useTranslation();
@@ -32,31 +34,39 @@ const Navbar = () => {
       </Link>
       <div className="flex justify-center items-center gap-4">
         {/* Buttons */}
-        <div className="flex justify-center items-center gap-2">
-          <Link
-            to="/login"
-            className={
-              i18n.language === "ar"
-                ? "rounded-full border hover:bg-red hover:text-white duration-300 py-2 px-4 text-red border-red text-arabic"
-                : "rounded-full border hover:bg-red hover:text-white duration-300 py-2 px-4 text-red border-red text-latin"
-            }
-          >
-            {t("navbar.logIn")}
-          </Link>
-          <Link
-            to="/signup"
-            className={
-              i18n.language === "ar"
-                ? "rounded-full border hover:border-red py-2 px-4 bg-red text-white border-red hover:bg-opacity-70 duration-700 text-arabic"
-                : "rounded-full border hover:border-red py-2 px-4 bg-red text-white border-red hover:bg-opacity-70 duration-700 text-latin"
-            }
-          >
-            {t("navbar.signUp")}
-          </Link>
-        </div>
+        {!loggedIn && (
+          <div className="flex justify-center items-center gap-2">
+            <Link
+              to="/login"
+              className={
+                i18n.language === "ar"
+                  ? "rounded-full border hover:bg-red hover:text-white duration-300 py-2 px-4 text-red border-red text-arabic"
+                  : "rounded-full border hover:bg-red hover:text-white duration-300 py-2 px-4 text-red border-red text-latin"
+              }
+            >
+              {t("navbar.logIn")}
+            </Link>
+            <Link
+              to="/signup"
+              className={
+                i18n.language === "ar"
+                  ? "rounded-full border hover:border-red py-2 px-4 bg-red text-white border-red hover:bg-opacity-70 duration-700 text-arabic"
+                  : "rounded-full border hover:border-red py-2 px-4 bg-red text-white border-red hover:bg-opacity-70 duration-700 text-latin"
+              }
+            >
+              {t("navbar.signUp")}
+            </Link>
+          </div>
+        )}
+
         <div className="grid  grid-cols-3 gap-2">
           {/* Icons */}
-          <UserIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
+          {loggedIn && (
+            <Link to={role === 2 ? "/donor" : "/clinic"}>
+              <UserIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
+            </Link>
+          )}
+
           <MagnifyingGlassIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
           {/* Language Switcher */}
           <div className="relative">

@@ -24,7 +24,8 @@
     "login": "Connexion",
     "notDonor": "Pas encore un donateur ?",
     "welcome": "Nous vous attendions avec impatience",
-    "donor": "Donateurs"
+    "donor": "les membres de notre communauté",
+    "wrong": "Désolé, vous avez essayé de vous connecter avec de mauvaises informations d'identification."
   },
   "signup": {
     "steps": {
@@ -43,7 +44,9 @@
       "clinicAddress": "Adresse de la clinique"
     },
     "buttons": {
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "signin": "Se Connecter",
+      "signup": "S'Inscrire"
     },
     "choices": {
       "bloodType": "Groupe sanguin",

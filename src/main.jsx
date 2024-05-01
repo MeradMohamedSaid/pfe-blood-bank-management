@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 
 import "./index.css";
@@ -20,6 +20,8 @@ import AboutUs from "./pages/AboutUs.jsx";
 import ClinicAppointment from "./pages/CAppointment.jsx";
 import ClinicApplication from "./pages/CApplication.jsx";
 import ClinicHistory from "./pages/CHistory.jsx";
+import ClinicAppointmentPhase from "./pages/CAppointmentPhase.jsx";
+import SetAppoitment from "./pages/DSetAppointment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,13 +32,18 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <SignUp /> },
   { path: "/about-us", element: <AboutUs /> },
+  { path: "/donor", element: <DonorApp /> },
   { path: "/donor/application", element: <DonorApplication /> },
   { path: "/donor/appointment", element: <DonorApp /> },
+  { path: "/donor/appointment/setAppointment", element: <SetAppoitment /> },
   { path: "/donor/history", element: <DonorHistory /> },
+  { path: "/clinic", element: <ClinicHistory /> },
   { path: "/clinic/application", element: <ClinicApplication /> },
   { path: "/clinic/appointment", element: <ClinicAppointment /> },
   { path: "/clinic/history", element: <ClinicHistory /> },
+  { path: "/clinic/makeappointment", element: <ClinicAppointmentPhase /> },
 ]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Suspense>

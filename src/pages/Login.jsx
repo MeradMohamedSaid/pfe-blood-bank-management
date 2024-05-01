@@ -11,14 +11,89 @@ import loginDrop from "../assets/loginDrop.png"; // Importing image asset
 import { AppLayout } from "../components/AppLayout"; // Importing custom layout component
 import { Link } from "react-router-dom"; // Importing Link component for routing
 import footerImg from "../assets/footer.png";
+import axios from "axios";
+axios.defaults.withCredentials = true;
+import { useNavigate } from "react-router-dom";
+import "ldrs/wobble";
+import "ldrs/quantum";
+import "ldrs/ring2";
 
 // Define Login component
 const Login = () => {
+  const navigate = useNavigate();
+
+  //state to block login
+  const [isWorking, setIsWorking] = useState(false);
+
   // State to manage password visibility
   const [pwVisible, setPwVisible] = useState("false");
 
+  const [ErrorMSG, setErrorMSG] = useState(false);
+
   // Translation hook
   const { t, i18n } = useTranslation();
+
+  //Function
+  const [userEmail, setUserEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (event) => {
+    const email = event.target.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(email);
+    setUserEmail(email);
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+  const handleLogin = async () => {
+    setIsWorking((old) => true);
+    const loginJson = { email: userEmail, password: password };
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/login",
+        loginJson,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status !== 200) {
+        // console.log("Login failed");
+        throw new Error("Login failed");
+      }
+      console.log("Login successful:", response.data);
+      new Promise((resolve) => {
+        setTimeout(() => {
+          setIsWorking((old) => false);
+          switch (response.data.Session.role) {
+            case 2:
+              navigate("/donor");
+              break;
+            case 3:
+              navigate("/clinic");
+              break;
+            default:
+              break;
+          }
+          resolve();
+        }, 1000);
+      });
+    } catch (error) {
+      console.log("Login failed");
+      new Promise((resolve) => {
+        setTimeout(() => {
+          setIsWorking((old) => false);
+          setErrorMSG((ofld) => true);
+          resolve();
+        }, 1000);
+      });
+
+      console.error("Error logging in:", error.message);
+    }
+  };
 
   // Render UI
   return (
@@ -26,7 +101,6 @@ const Login = () => {
       <div className="container w-fit pt-20 flex justify-center items-center">
         {/* Background image */}
         <img className="fixed top-[19rem] -z-50" src={loginDrop} alt="" />
-
         {/* Login form */}
         <div
           className={
@@ -39,7 +113,7 @@ const Login = () => {
           <h1
             className={
               i18n.language === "ar"
-                ? "text-5xl mb-8 text-center  text-arabic"
+                ? "text-5xl mb-8 text-center text-arabic"
                 : "text-5xl mb-8 text-center w-3/4 text-latin"
             }
           >
@@ -49,22 +123,45 @@ const Login = () => {
           {/* Input Fields */}
           <div className="w-[26rem]">
             <p className="text-sm mb-2">{t("login.email")}</p>
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+            <div
+              className={
+                !isWorking
+                  ? "bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4"
+                  : "bg-F4F4F4 p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red cursor-not-allowed text-red mb-4"
+              }
+            >
               <EnvelopeIcon className="w-6" />
               <input
-                class="outline-none w-full"
+                className={
+                  !isWorking
+                    ? "outline-none w-full"
+                    : "outline-none w-full bg-F4F4F4 cursor-not-allowed"
+                }
                 type="text"
                 placeholder="name@example.com"
+                onChange={handleEmailChange} // Add onChange handler for password input
+                disabled={isWorking}
               />
             </div>
 
             <p className="text-sm mb-2">{t("login.password")}</p>
-            <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+            <div
+              className={
+                !isWorking
+                  ? "bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4"
+                  : "bg-F4F4F4 p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red cursor-not-allowed text-red mb-4"
+              }
+            >
               <LockClosedIcon className="w-6" />
               <input
                 placeholder="Password"
                 type={!pwVisible ? "text" : "Password"} // Toggle password visibility
-                class="outline-none w-full"
+                className={
+                  !isWorking
+                    ? "outline-none w-full"
+                    : "outline-none w-full bg-F4F4F4 cursor-not-allowed"
+                }
+                onChange={handlePasswordChange} // Add onChange handler for password input
               />
               {pwVisible ? (
                 <EyeIcon
@@ -87,14 +184,55 @@ const Login = () => {
           {/* Login button */}
           <button
             className={
+              !isWorking
+                ? i18n.language === "ar"
+                  ? // ? "max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
+                    "max-w-[26rem] min-h-[3rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic flex justify-center items-center"
+                  : "max-w-[26rem] min-h-[3rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin flex justify-center items-center"
+                : i18n.language === "ar"
+                ? "max-w-[26rem] min-h-[3rem] bg-disable text-center text-white w-full py-2 rounded-xl cursor-not-allowed text-arabic flex justify-center items-center"
+                : "max-w-[26rem] min-h-[3rem] bg-disable text-center text-white w-full py-2 rounded-xl cursor-not-allowed text-latin flex justify-center items-center"
+            }
+            disabled={isWorking}
+            onClick={async () => {
+              await handleLogin();
+            }}
+          >
+            {isWorking ? (
+              <>
+                {/* <l-wobble
+                  size="15"
+                  speed="0.9"
+                  color="rgb(255,197,207)"
+                ></l-wobble> */}
+                <l-ring-2
+                  size="20"
+                  stroke="2"
+                  stroke-length="0.25"
+                  bg-opacity="0.1"
+                  speed="0.8"
+                  color="rgb(255,197,207)"
+                ></l-ring-2>
+              </>
+            ) : (
+              <h1
+                className={
+                  i18n.language === "ar" ? "text-arabic" : "text-latin"
+                }
+              >
+                {t("signup.buttons.signin")}
+              </h1>
+            )}
+          </button>
+          <h2
+            className={
               i18n.language === "ar"
-                ? "max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-arabic"
-                : "max-w-[26rem] bg-red text-center text-white w-full py-2 rounded-xl hover:bg-opacity-70 duration-300 cursor-pointer text-latin"
+                ? "text-arabic-err max-w-[26rem] text-center"
+                : "text-latin-err max-w-[26rem] text-center"
             }
           >
-            <h1>{t("login.login")}</h1>
-          </button>
-
+            {ErrorMSG ? t("login.wrong") : ""}
+          </h2>
           {/* Link to signup */}
           <Link
             to="/signup"

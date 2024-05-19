@@ -5,9 +5,12 @@ import frIcon from "../assets/frIcon.png";
 import enIcon from "../assets/enIcon.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
+  ArrowLeftStartOnRectangleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 
@@ -22,6 +25,26 @@ const Navbar = ({ loggedIn, role }) => {
     i18n.changeLanguage(newLang);
     setShowDropdown(false);
   };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+  const logout = async () => {
+    axios
+      .post("http://localhost:3000/logout")
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Logout successful");
+        } else {
+          console.error("Logout failed");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-[1400px] mx-auto flex items-center justify-between">
@@ -59,16 +82,32 @@ const Navbar = ({ loggedIn, role }) => {
           </div>
         )}
 
-        <div className="grid  grid-cols-3 gap-2">
+        <div className="grid  grid-cols-4 gap-2">
           {/* Icons */}
           {loggedIn && (
-            <Link to={role === 2 ? "/donor" : "/clinic"}>
-              <UserIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
-            </Link>
+            <>
+              <Link
+                to={
+                  role === 1
+                    ? "/admin"
+                    : role === 2
+                    ? "/donor"
+                    : role === 3
+                    ? "/clinic"
+                    : "/bloodcenter"
+                }
+              >
+                <UserIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
+              </Link>
+              {role === 4 && (
+                <Link onClick={() => handleLogout()}>
+                  <ArrowLeftStartOnRectangleIcon className=" text-red hover:text-opacity-50 duration-300 cursor-pointer" />
+                </Link>
+              )}
+            </>
           )}
 
           <MagnifyingGlassIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
-          {/* Language Switcher */}
           <div className="relative">
             <div
               className="w-8 border cursor-pointer border-slate-100 border rounded-full overflow-hidden hover:border-[#F0073B] duration-300"

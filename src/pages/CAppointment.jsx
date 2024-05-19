@@ -9,150 +9,80 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MagnifyingGlassIcon,
+  ArrowLongDownIcon,
+  ArrowsUpDownIcon,
 } from "@heroicons/react/24/outline";
+
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import axios from "axios";
 const ClinicAppointment = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [filterType, setFilterType] = useState("id"); // Default filter type is "id"
+  const [filterType, setFilterType] = useState("center"); // Default filter type is "id"
   const [searchQuery, setSearchQuery] = useState("");
   // table logic
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Sample data for the table
-  const tableData = [
-    {
-      clinicName: "Center A",
-      stock: 50,
-      isAvailable: true,
-      canRequest: false,
-    },
-    {
-      clinicName: "Center B",
-      stock: 30,
-      isAvailable: false,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center C",
-      stock: 40,
-      isAvailable: false,
-      canRequest: false,
-    },
-    {
-      clinicName: "Center D",
-      stock: 60,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center E",
-      stock: 55,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center F",
-      stock: 70,
-      isAvailable: true,
-      canRequest: true,
-    },
-    // Additional data entries
-    {
-      clinicName: "Center G",
-      stock: 45,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center H",
-      stock: 65,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center I",
-      stock: 75,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center J",
-      stock: 80,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center K",
-      stock: 55,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center L",
-      stock: 65,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center M",
-      stock: 70,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center N",
-      stock: 90,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center O",
-      stock: 45,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center P",
-      stock: 55,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center Q",
-      stock: 65,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center R",
-      stock: 70,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center S",
-      stock: 80,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center T",
-      stock: 85,
-      isAvailable: true,
-      canRequest: true,
-    },
-    {
-      clinicName: "Center U",
-      stock: 60,
-      isAvailable: true,
-      canRequest: true,
-    },
-    // Add more data entries as needed
-  ];
+  const [tableData, setTableData] = useState([]);
+
+  const [centers, setCenters] = useState();
+
+  useEffect(() => {
+    fetchCenters();
+  }, []);
+
+  const [sort, setSort] = useState(0);
+
+  const fetchCenters = async () => {
+    setIsLoading((old) => true);
+    console.log("fetching centers");
+    const cent = await getCenters();
+    var newCenters = [];
+    cent.forEach((cen) => {
+      console.log("center Row : ", cen);
+      const cini = {
+        id: cen.id,
+        clinicName: cen.name,
+        isAvailable: cen.todaySchedule.morning || cen.todaySchedule.evening,
+        canRequest: cen.todaySchedule.morning || cen.todaySchedule.evening,
+        stock: cen.maxCapacite,
+      };
+      newCenters.push(cini);
+    });
+    setTableData((old) => newCenters);
+    setCenters((old) => newCenters);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        setIsLoading((old) => false);
+        resolve();
+      }, 500);
+    });
+  };
+
+  const getCenters = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/getstroingcentre",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error("Failed to fetch Centers data");
+      }
+
+      console.log("Centers data:", response.data.Results);
+      return response.data.Results;
+    } catch (error) {
+      console.error("Error fetching Centers data:", error.message);
+      throw error;
+    }
+  };
 
   // Calculate the range of items to display based on the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -170,19 +100,18 @@ const ClinicAppointment = () => {
   // Filter items based on the selected filter type and search query
   const filteredItems = tableData.filter((item) => {
     if (!searchQuery) return true; // If search query is empty, don't apply search filter
-
     // Apply search filter based on the selected filter type
     switch (filterType) {
       case "id":
         return item.id.toString().includes(searchQuery);
       case "center":
-        return item.center.toLowerCase().includes(searchQuery.toLowerCase());
-      case "dateTime":
-        return item.dateTime.includes(searchQuery);
+        return item.clinicName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
       case "capacity":
-        return item.capacity.toString().includes(searchQuery);
+        return item.stock >= searchQuery;
       default:
-        return true; // Return true to include all items if filter type is unknown
+        return true;
     }
   });
 
@@ -270,6 +199,89 @@ const ClinicAppointment = () => {
     }
   };
 
+  const setAfterSort = (n) => {
+    let data = [...tableData];
+    switch (n) {
+      case 0:
+        data = centers;
+        break;
+      case 1:
+        data.sort((a, b) => {
+          const clinicNameA = a.clinicName.toLowerCase();
+          const clinicNameB = b.clinicName.toLowerCase();
+          if (clinicNameA < clinicNameB) {
+            return -1;
+          }
+          if (clinicNameA > clinicNameB) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      case 2:
+        data.sort((a, b) => {
+          const clinicNameA = b.clinicName.toLowerCase();
+          const clinicNameB = a.clinicName.toLowerCase();
+          if (clinicNameA < clinicNameB) {
+            return -1;
+          }
+          if (clinicNameA > clinicNameB) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      case 3:
+        data.sort((a, b) => a.stock - b.stock);
+        break;
+      case 4:
+        data.sort((a, b) => b.stock - a.stock);
+        break;
+      case 5:
+        data.sort((a, b) => {
+          const isAvailableA = a.isAvailable ? 0 : 1;
+          const isAvailableB = b.isAvailable ? 0 : 1;
+          return isAvailableA - isAvailableB;
+        });
+        break;
+      case 6:
+        data.sort((b, a) => {
+          const isAvailableA = a.isAvailable ? 0 : 1;
+          const isAvailableB = b.isAvailable ? 0 : 1;
+          return isAvailableA - isAvailableB;
+        });
+        break;
+      default:
+        data = centers || [];
+    }
+    setTableData(data);
+    console.log("table after reSort:", data);
+  };
+
+  const handleSortName = () => {
+    let n = sort;
+    if (sort === 1) n = 2;
+    else if (sort === 2) n = 0;
+    else n = 1;
+    setSort((old) => n);
+    setAfterSort(n);
+  };
+  const handleSortStatus = () => {
+    let n = sort;
+    if (sort === 5) n = 6;
+    else if (sort === 6) n = 0;
+    else n = 5;
+    setSort((old) => n);
+    setAfterSort(n);
+  };
+  const handleSortStock = () => {
+    let n = sort;
+    if (sort === 3) n = 4;
+    else if (sort === 4) n = 0;
+    else n = 3;
+    setSort((old) => n);
+    setAfterSort(n);
+  };
   return (
     <AppLayout>
       <ClinicNavbar />
@@ -279,7 +291,7 @@ const ClinicAppointment = () => {
         </>
       ) : (
         <>
-          <div className="container">
+          <div className="container fade-in-up">
             {!isVerified ? (
               <AppNotice />
             ) : (
@@ -329,19 +341,7 @@ const ClinicAppointment = () => {
                             : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
                         }
                       >
-                        <p>By Center</p>
-                      </div>
-                      <div
-                        onClick={() => {
-                          setFilterType("dateTime");
-                        }}
-                        className={
-                          filterType === "dateTime"
-                            ? "p-2 border border-red rounded-xl flex justify-center items-center gap-1 cursor-pointer bg-red text-white duration-300"
-                            : "p-2 border border-gray-400 hover:border-red rounded-xl flex justify-center items-center gap-1 text-gray-400 cursor-pointer hover:bg-red hover:text-white duration-300"
-                        }
-                      >
-                        <p>By Date</p>
+                        <p>By Name</p>
                       </div>
                       <div
                         onClick={() => {
@@ -357,17 +357,70 @@ const ClinicAppointment = () => {
                       </div>
                     </div>
                   ) : null}
-                  <div className="p-2 border ml-auto border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300">
+                  <div
+                    className="p-2 border ml-auto border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
+                    onClick={fetchCenters}
+                  >
                     <ArrowPathIcon className="w-6 h-6" />
                   </div>
                 </div>
                 {/* Render table */}
-                <div className="rounded-xl overflow-hidden border border-red mb-4">
-                  <div className="grid grid-cols-4 bg-red text-white">
-                    <p className="p-4 font-bold text-xl">Center</p>
-                    <p className="p-4 font-bold text-xl">Stock (packets)</p>
-                    <p className="p-4 font-bold text-xl">Status</p>
-                    <p className="p-4 font-bold text-xl">Make a Request</p>
+                <div className="rounded-xl overflow-hidden border border-red mb-4 select-none">
+                  <div className="grid grid-cols-4 bg-red text-white ">
+                    <p
+                      className=" p-4 font-bold text-xl flex justify-between items-center cursor-pointer bg-red hover:brightness-90 duration-500"
+                      onClick={() => handleSortName()}
+                    >
+                      <span>Center</span>
+                      <span className="cursor-pointer size-4 bg-red flex justify-center items-center">
+                        {sort === 1 || sort === 2 ? (
+                          <ArrowLongDownIcon
+                            className={
+                              sort === 1 ? "size-4" : "size-4 rotate-180"
+                            }
+                          />
+                        ) : (
+                          <ArrowsUpDownIcon className="size-4" />
+                        )}
+                      </span>
+                    </p>
+                    <p
+                      className="p-4 font-bold text-xl flex justify-between items-center cursor-pointer bg-red hover:brightness-90 duration-500"
+                      onClick={() => handleSortStock()}
+                    >
+                      Stock (packets)
+                      <span className="cursor-pointer size-4 bg-red flex justify-center items-center">
+                        {sort === 3 || sort === 4 ? (
+                          <ArrowLongDownIcon
+                            className={
+                              sort === 3 ? "size-4" : "size-4 rotate-180"
+                            }
+                          />
+                        ) : (
+                          <ArrowsUpDownIcon className="size-4" />
+                        )}
+                      </span>
+                    </p>
+                    <p
+                      className="p-4 font-bold text-xl flex justify-between items-center cursor-pointer bg-red hover:brightness-90 duration-500"
+                      onClick={() => handleSortStatus()}
+                    >
+                      Status
+                      <span className="cursor-pointer size-4 bg-red flex justify-center items-center">
+                        {sort === 5 || sort === 6 ? (
+                          <ArrowLongDownIcon
+                            className={
+                              sort === 5 ? "size-4" : "size-4 rotate-180"
+                            }
+                          />
+                        ) : (
+                          <ArrowsUpDownIcon className="size-4" />
+                        )}
+                      </span>
+                    </p>
+                    <p className="p-4 font-bold text-xl flex justify-between items-center">
+                      Make a Request
+                    </p>
                   </div>
                   {filteredItems
                     .slice(startIndex, endIndex)
@@ -393,14 +446,14 @@ const ClinicAppointment = () => {
                                 </p>
                               )}
                             </p>
-                            <p className=" flex justify-center items-center">
+                            <p className="flex w-full justify-center items-center">
                               {item.canRequest ? (
                                 <>
                                   <button
-                                    className="bg-red w-fit mx-auto py-2 px-8 text-white hover:bg-opacity-80 duration-300 cursor-pointer  rounded-md"
+                                    className="bg-red text-white hover:bg-opacity-80 duration-300 cursor-pointer rounded-md w-[80%] h-[80%]"
                                     onClick={() => {
                                       navigate(
-                                        `/clinic/makeappointment?id=${item.clinicName}`
+                                        `/clinic/requestBlood?id=${item.id}`
                                       );
                                       console.log("Navigate");
                                     }}
@@ -409,7 +462,7 @@ const ClinicAppointment = () => {
                                   </button>
                                 </>
                               ) : (
-                                <div className="bg-zinc-400 text-zinc-600 cursor-not-allowed w-fit mx-auto py-2 px-8 rounded-md">
+                                <div className="bg-zinc-300 text-zinc-600 flex justify-center items-center text-center cursor-not-allowed rounded-md w-[80%] h-[80%]">
                                   Request
                                 </div>
                               )}

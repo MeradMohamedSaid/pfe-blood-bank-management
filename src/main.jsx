@@ -22,6 +22,10 @@ import ClinicApplication from "./pages/CApplication.jsx";
 import ClinicHistory from "./pages/CHistory.jsx";
 import ClinicAppointmentPhase from "./pages/CAppointmentPhase.jsx";
 import SetAppoitment from "./pages/DSetAppointment.jsx";
+import BloodCenterDashBoard from "./pages/BloodCenterDashBoard.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import AdminCenters from "./pages/AdminCenters.jsx";
+import AdminUsers from "./pages/AdminUsers.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +45,12 @@ const router = createBrowserRouter([
   { path: "/clinic/application", element: <ClinicApplication /> },
   { path: "/clinic/appointment", element: <ClinicAppointment /> },
   { path: "/clinic/history", element: <ClinicHistory /> },
-  { path: "/clinic/makeappointment", element: <ClinicAppointmentPhase /> },
+  { path: "/clinic/requestBlood", element: <ClinicAppointmentPhase /> },
+  { path: "/bloodcenter", element: <BloodCenterDashBoard /> },
+  { path: "/admin", element: <AdminDashboard /> },
+  { path: "/admin/dashboard", element: <AdminDashboard /> },
+  { path: "/admin/centers-dashboard", element: <AdminCenters /> },
+  { path: "/admin/users-dashboard", element: <AdminUsers /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -1,13 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import heroIllu from "../assets/hero-illu.svg";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AppLayout } from "../components/AppLayout";
 import footerImg from "../assets/footer.png";
+
+import axios from "axios";
+import { Link } from "react-router-dom";
+
 const LandingPage = () => {
   const { t, i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [center, setCenter] = useState();
+  const [centers, setCenters] = useState();
+
+  useEffect(() => {
+    fetchCenters();
+  }, []);
+
+  const fetchCenters = async () => {
+    console.log("fetching centers");
+    const cent = await getCenters();
+    setCenters((old) => cent);
+  };
+
+  const getCenters = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/getstroingcentre",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error("Failed to fetch Centers data");
+      }
+
+      console.log("Centers data:", response.data.Results);
+      return response.data.Results;
+    } catch (error) {
+      console.error("Error fetching Centers data:", error.message);
+      throw error;
+    }
+  };
+
   return (
     <AppLayout>
       <div className="container">
@@ -61,65 +100,34 @@ const LandingPage = () => {
                 {center == null ? (
                   <p>{t("landingpage.findCenter")}</p>
                 ) : (
-                  <p>{center}</p>
+                  <p>{center.name}</p>
                 )}
                 <ChevronDownIcon className="h-6 w-6 " />
                 {showModal ? (
-                  <div className="absolute top-16 overflow-y-auto h-40 w-full left-0 rounded-md text-sm bg-white border hover:border-red flex flex-col">
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 1");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 1
-                    </p>
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 2");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 2
-                    </p>
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 3");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 3
-                    </p>
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 4");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 4
-                    </p>
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 5");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 5
-                    </p>
-                    <p
-                      onClick={() => {
-                        setCenter("Medical Center 6");
-                      }}
-                      className="py-2 px-4 hover:bg-red-50 duration-300"
-                    >
-                      Medical Center 6
-                    </p>
+                  <div className="absolute top-16 overflow-y-auto max-h-40 w-full left-0 rounded-md text-sm bg-white border hover:border-red flex flex-col">
+                    {centers &&
+                      centers.map((cen, _) => {
+                        return (
+                          <p
+                            key={_}
+                            onClick={() => {
+                              setCenter(cen);
+                            }}
+                            className="py-2 px-4 hover:bg-red-50 duration-300"
+                          >
+                            {cen.name}
+                          </p>
+                        );
+                      })}
                   </div>
                 ) : null}
               </div>
-              <button className="bg-red text-white py-4 px-6 rounded-xl min-w-fit hover:bg-opacity-80 duration-300">
+              <Link
+                className="bg-red text-white py-4 px-6 rounded-xl min-w-fit hover:bg-opacity-80 duration-300"
+                to="/signup"
+              >
                 {t("landingpage.startJourney")}
-              </button>
+              </Link>
             </div>
           </div>
           {/* Hero Illustration */}

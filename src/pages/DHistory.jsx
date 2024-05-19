@@ -23,136 +23,13 @@ const DonorHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Sample data for the table
   const tableData = [
     {
       id: 1234,
-      dateTime: "2024-03-31 09:00",
+      dateTime: "2024-03-31",
       center: "Center A",
       capacity: 50,
     },
-    {
-      id: 5678,
-      dateTime: "2024-03-31 10:30",
-      center: "Center B",
-      capacity: 30,
-    },
-    {
-      id: 91011,
-      dateTime: "2024-03-31 12:00",
-      center: "Center C",
-      capacity: 40,
-    },
-    {
-      id: 121314,
-      dateTime: "2024-03-31 13:30",
-      center: "Center D",
-      capacity: 60,
-    },
-    {
-      id: 151617,
-      dateTime: "2024-03-31 15:00",
-      center: "Center E",
-      capacity: 55,
-    },
-    {
-      id: 181920,
-      dateTime: "2024-03-31 16:30",
-      center: "Center F",
-      capacity: 70,
-    },
-    // Additional data entries
-    {
-      id: 212223,
-      dateTime: "2024-03-31 18:00",
-      center: "Center G",
-      capacity: 45,
-    },
-    {
-      id: 242526,
-      dateTime: "2024-03-31 19:30",
-      center: "Center H",
-      capacity: 65,
-    },
-    {
-      id: 272829,
-      dateTime: "2024-03-31 21:00",
-      center: "Center I",
-      capacity: 75,
-    },
-    {
-      id: 303132,
-      dateTime: "2024-03-31 22:30",
-      center: "Center J",
-      capacity: 80,
-    },
-    {
-      id: 333435,
-      dateTime: "2024-03-31 00:00",
-      center: "Center K",
-      capacity: 55,
-    },
-    {
-      id: 363738,
-      dateTime: "2024-03-31 01:30",
-      center: "Center L",
-      capacity: 65,
-    },
-    {
-      id: 394041,
-      dateTime: "2024-03-31 03:00",
-      center: "Center M",
-      capacity: 70,
-    },
-    {
-      id: 424344,
-      dateTime: "2024-03-31 04:30",
-      center: "Center N",
-      capacity: 90,
-    },
-    {
-      id: 454647,
-      dateTime: "2024-03-31 06:00",
-      center: "Center O",
-      capacity: 45,
-    },
-    {
-      id: 484950,
-      dateTime: "2024-03-31 07:30",
-      center: "Center P",
-      capacity: 55,
-    },
-    {
-      id: 515253,
-      dateTime: "2024-03-31 09:00",
-      center: "Center Q",
-      capacity: 65,
-    },
-    {
-      id: 545556,
-      dateTime: "2024-03-31 10:30",
-      center: "Center R",
-      capacity: 70,
-    },
-    {
-      id: 575859,
-      dateTime: "2024-03-31 12:00",
-      center: "Center S",
-      capacity: 80,
-    },
-    {
-      id: 606162,
-      dateTime: "2024-03-31 13:30",
-      center: "Center T",
-      capacity: 85,
-    },
-    {
-      id: 636465,
-      dateTime: "2024-03-31 15:00",
-      center: "Center U",
-      capacity: 60,
-    },
-    // Add more data entries as needed
   ];
 
   // Calculate the range of items to display based on the current page
@@ -319,7 +196,7 @@ const DonorHistory = () => {
                 <div className="rounded-xl overflow-hidden border border-red mb-4">
                   <div className="grid grid-cols-4 bg-red text-white">
                     <p className="p-4 font-bold text-xl">ID</p>
-                    <p className="p-4 font-bold text-xl">Date & Time</p>
+                    <p className="p-4 font-bold text-xl">Date</p>
                     <p className="p-4 font-bold text-xl">Center</p>
                     <p className="p-4 font-bold text-xl">Packet capacity</p>
                   </div>

@@ -75,6 +75,9 @@ body {
   .text-red {
     @apply text-[#F0073B];
   }
+  .text-green {
+    @apply text-[#7BD479];
+  }
 
   .bg-red {
     @apply bg-[#F0073B];
@@ -108,6 +111,11 @@ body {
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-red bg-opacity-60;
   }
+}
+
+.backdrop-blur {
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(8px); /* Blur effect */
 }
 
 .fade-in-up {

@@ -34,10 +34,10 @@ const UserNavbar = () => {
   };
 
   const [loggedIn, setLoggedIn] = useState(true);
-  const [role, setUserRole] = useState(-1);
+  const [role, setUserRole] = useState();
   const [loading, setIsLoading] = useState(true);
-  const [isVerified, setIsVerified] = useState(true);
-  const [docs, setDocs] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+  const [docs, setDocs] = useState(0);
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -63,10 +63,10 @@ const UserNavbar = () => {
         setIsVerified((old) => true);
       }
       if (data.docs !== 1) {
-        setDocs((olds) => false);
-        navigate("/donor");
+        setDocs((olds) => data.docs);
+        if (data.docs === 0) navigate("/donor");
       } else {
-        setDocs((olds) => true);
+        setDocs((olds) => data.docs);
       }
       new Promise((resolve) => {
         setTimeout(() => {
@@ -129,7 +129,8 @@ const UserNavbar = () => {
         >
           <img className="w-12 h-12" src={AppointmentIcon} alt="" />
         </Link>
-        {docs || isVerified ? (
+
+        {isVerified && (
           <>
             <Link
               to="/donor/history"
@@ -137,17 +138,15 @@ const UserNavbar = () => {
             >
               <img className="w-12 h-12" src={HistoryIcon} alt="" />
             </Link>
-            {!isVerified && (
-              <Link
-                to="/donor/application"
-                className="h-fit w-fit p-4 rounded-xl bg-white hover:bg-red-100 hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer"
-              >
-                <img className="w-12 h-12" src={AplicationIcon} alt="" />
-              </Link>
-            )}
           </>
-        ) : (
-          <></>
+        )}
+        {!isVerified && docs !== 0 && (
+          <Link
+            to="/donor/application"
+            className="h-fit w-fit p-4 rounded-xl bg-white hover:bg-red-100 hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer"
+          >
+            <img className="w-12 h-12" src={AplicationIcon} alt="" />
+          </Link>
         )}
       </div>
       {/* LogOut and Settings */}

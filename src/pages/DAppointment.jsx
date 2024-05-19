@@ -20,8 +20,8 @@ const DonnorApp = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setIsLoading] = useState(true);
 
-  const [time, setTime] = useState(1716620400);
-
+  const [realTimeSlots, setRealTimeSlots] = useState([]);
+  const [userRole, setUserRole] = useState();
   useEffect(() => {
     const userStatus = async () => {
       const data = await getUserStatus();
@@ -30,7 +30,9 @@ const DonnorApp = () => {
         ? setIsVerified((old) => false)
         : setIsVerified((old) => true);
       data.docs === 0 ? setDocs((olds) => false) : setDocs((olds) => true);
-
+      setUserRole((oldi) => data.role);
+      const timeTable = await getRealTimeWeekWithTimeSlots();
+      setRealTimeSlots((old) => timeTable);
       new Promise((resolve) => {
         setTimeout(() => {
           setIsLoading(false);
@@ -38,9 +40,22 @@ const DonnorApp = () => {
         }, 500);
       });
     };
-    userStatus();
-  }, []);
 
+    const fetchAppo = async () => {
+      const appo = await getUserAppoitment();
+      if (!appo.res) {
+        setIsAppoinmentSet((old) => false);
+      } else {
+        console.log("fetch appo : ", appo);
+        setIsAppoinmentSet((old) => true);
+        setAppointmentValue((oldi) => appo.Appointments);
+      }
+      console.log("Appointment fetched : ", appo);
+    };
+    userStatus();
+    fetchAppo();
+  }, []);
+  const [appointmentValue, setAppointmentValue] = useState();
   const getUserStatus = async () => {
     try {
       const response = await axios.get("http://localhost:3000/userStat", {
@@ -61,6 +76,67 @@ const DonnorApp = () => {
     }
   };
 
+  const getUserAppoitment = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/getUserAppointments",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error("Failed to fetch user Appointments data");
+      }
+
+      console.log("User user Appointments data:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user Appointments data:", error.message);
+      throw error;
+    }
+  };
+
+  const getRealTimeWeekWithTimeSlots = async () => {
+    try {
+      const response = await axios.get("http://worldtimeapi.org/api/ip", {
+        withCredentials: false,
+      });
+      const currentTime = new Date(response.data.utc_datetime);
+      const currentDay = currentTime.getDay();
+      const startDate = new Date(currentTime);
+      startDate.setDate(startDate.getDate() - currentDay);
+      if (currentDay === 5 || currentDay === 6) {
+        startDate.setDate(startDate.getDate() + 7);
+      }
+      const formattedWeekData = [];
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const dayDate = date.toISOString().split("T")[0];
+        const eightAM = new Date(date);
+        eightAM.setUTCHours(8, 0, 0, 0);
+        const eightAMUnixTimestamp = eightAM.getTime() / 1000;
+        const twoPM = new Date(date);
+        twoPM.setUTCHours(14, 0, 0, 0);
+        const twoPMUnixTimestamp = twoPM.getTime() / 1000;
+        const dayObject = {
+          day: i + 1,
+          dayDate: dayDate,
+          eight: eightAMUnixTimestamp,
+          two: twoPMUnixTimestamp,
+        };
+        formattedWeekData.push(dayObject);
+      }
+      return formattedWeekData;
+    } catch (error) {
+      console.error("Error:", error.message);
+      return null;
+    }
+  };
+
   return (
     <AppLayout>
       <UserNavbar />
@@ -72,7 +148,16 @@ const DonnorApp = () => {
             {!isVerified ? (
               <AppNotice />
             ) : isAppoinmentSet ? (
-              <AppointmentTimer time={time} />
+              <AppointmentTimer
+                name={appointmentValue.name}
+                address={appointmentValue.address}
+                timeObject={realTimeSlots}
+                day={appointmentValue.day}
+                period={appointmentValue.period}
+                rank={appointmentValue.queueRank}
+                verify={appointmentValue.validation}
+                userRole={3}
+              />
             ) : (
               <div className="grid grid-cols-2 gap-8 h-[80vh]">
                 {/* when appoinment is still not set */}

@@ -111,7 +111,7 @@ const DonnorApplication = () => {
                       : "py-2 px-6 text-gray-300 hover:cursor-pointer hover:text-red duration-300 border-b-2 border-transparent hover:border-red"
                   }
                 >
-                  Personal Documents
+                  Required Documents
                 </p>
               </div>
               {section === 1 ? (

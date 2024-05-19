@@ -15,23 +15,26 @@ import {
   BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import "ldrs/ring2";
+
+// Default values shown
 
 const ClinicAppointmentPhase = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const [isVerified, setIsVerified] = useState(false);
   const [isAppoinmentSet, setIsAppoinmentSet] = useState(false);
-  const [center, setCenter] = useState();
-  const [showModal, setShowModal] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   ///////////////////////////////////////////////////////////////////////////
   const [showMedicalSituationDropdown, setShowMedicalSituationDropdown] =
     useState(false);
   const [medicalSituation, setMedicalSituation] = useState("");
   ///////////////////////////////////////////////////////////////////////////
-
-  const [id, setId] = useState("");
+  const [center, setCenter] = useState();
+  const [id, setId] = useState();
   useEffect(() => {
     const centerId = queryParams.get("id");
     if (centerId !== null) {
@@ -47,6 +50,8 @@ const ClinicAppointmentPhase = () => {
       } else {
         setIsVerified((old) => true);
       }
+      const cent = await getCenters(centerId);
+      setCenter((old) => cent);
       new Promise((resolve) => {
         setTimeout(() => {
           setIsLoading(false);
@@ -77,119 +82,257 @@ const ClinicAppointmentPhase = () => {
     }
   };
 
+  const getCenters = async (centerId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/getstroingcentreInfo/${centerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error("Failed to fetch Centers data");
+      }
+
+      console.log("Centers data:", response.data.Results);
+      return response.data.Results;
+    } catch (error) {
+      console.error("Error fetching Centers data:", error.message);
+      navigate("/clinic/appointment");
+      throw error;
+    }
+  };
+
+  const [patientName, setPatientName] = useState("");
+  const handleInputChange = (event) => {
+    setPatientName(event.target.value);
+  };
+
+  const [isWorking, setIsWorking] = useState(false);
+  const handleRequestBlod = async () => {
+    setIsWorking(true);
+    console.log(
+      "Blood Request : {centerId: ",
+      center.id,
+      ", PatientName : ",
+      patientName,
+      ", MedicalSituation : ",
+      medicalSituation === "Urgent" ||
+        medicalSituation === "Accident" ||
+        medicalSituation === "Surgery"
+        ? 1
+        : 0
+    );
+    const obj = {
+      storingCentreID: center.id,
+      PatientName: patientName,
+      urgent:
+        medicalSituation === "Urgent" ||
+        medicalSituation === "Accident" ||
+        medicalSituation === "Surgery"
+          ? 1
+          : 0,
+    };
+    const data = await postRequest(obj);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        setIsWorking(false);
+        resolve();
+      }, 500);
+    });
+
+    if (data.done)
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setIsAppoinmentSet(true);
+          resolve();
+        }, 100);
+      });
+  };
+
+  const postRequest = async (obj) => {
+    const url = "http://localhost:3000/addRequest";
+    try {
+      const response = await axios.post(url, obj);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
+
   return (
     <AppLayout>
       <ClinicNavbar />
-      <div className="container">
-        {!isVerified ? (
-          <AppNotice />
-        ) : isAppoinmentSet ? (
-          <div className="h-[80vh] flex justify-center flex-col">
-            Your Appointment is set, check history.
-          </div>
-        ) : (
-          <div className="h-[80vh] flex justify-center flex-col w-[26rem] mx-auto fade-in-up">
-            {/* when appoinment is still not set */}
-            <div>
-              <h1 className="text-3xl mb-4">Please fill this form :</h1>
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-                <BuildingOffice2Icon className="w-6" />
-                <p className="mr-auto ">{id}</p>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <div className="container">
+            {!isVerified ? (
+              <AppNotice />
+            ) : isAppoinmentSet ? (
+              <div className="h-[80vh] flex justify-center flex-col">
+                Your Request is passed, check history.
               </div>
-              <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
-                <UserIcon className="w-6" />
-                <input
-                  placeholder="Patient Name"
-                  type="text"
-                  class="outline-none w-full"
-                />
-              </div>
-              <div
-                className="relative bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4 cursor-pointer"
-                onClick={() =>
-                  setShowMedicalSituationDropdown(!showMedicalSituationDropdown)
-                }
-              >
-                <DocumentDuplicateIcon className="w-6" />
-                <div className="mr-auto ">
-                  <p className="select-none">
-                    {medicalSituation
-                      ? `Medical Situation: ${medicalSituation}`
-                      : "Medical Situation"}
+            ) : (
+              <div className="h-[80vh] flex justify-center flex-col w-[26rem] mx-auto fade-in-up">
+                {/* when appoinment is still not set */}
+                <div>
+                  <h1 className="text-3xl mb-4">Please fill this form :</h1>
+                  <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+                    <BuildingOffice2Icon className="w-6" />
+                    <p className="mr-auto ">{center.name}</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+                    <UserIcon className="w-6" />
+                    <input
+                      placeholder="Patient Name"
+                      type="text"
+                      class="outline-none w-full"
+                      value={patientName}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div
+                    className="relative bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4 cursor-pointer"
+                    onClick={() =>
+                      setShowMedicalSituationDropdown(
+                        !showMedicalSituationDropdown
+                      )
+                    }
+                  >
+                    <DocumentDuplicateIcon className="w-6" />
+                    <div className="mr-auto ">
+                      <p className="select-none">
+                        {medicalSituation
+                          ? `Medical Situation: ${medicalSituation}`
+                          : "Medical Situation"}
+                      </p>
+                    </div>
+                    <ChevronDownIcon className="w-6" />
+                    {showMedicalSituationDropdown && (
+                      <div className="absolute z-10 top-full left-0 bg-white shadow rounded-md border border-red-500 mt-1 w-full">
+                        <ul className="list-none p-0 m-0">
+                          <li
+                            className="cursor-pointer rounded-md px-4 py-2 hover:bg-gray-100"
+                            onClick={() => {
+                              setMedicalSituation("Urgent");
+                              setShowMedicalSituationDropdown(false);
+                            }}
+                          >
+                            Very Urgent
+                          </li>
+                          <li
+                            className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                            onClick={() => {
+                              setMedicalSituation("Surgery");
+                              setShowMedicalSituationDropdown(false);
+                            }}
+                          >
+                            Surgery
+                          </li>
+                          <li
+                            className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                            onClick={() => {
+                              setMedicalSituation("Accident");
+                              setShowMedicalSituationDropdown(false);
+                            }}
+                          >
+                            Accident
+                          </li>
+                          <li
+                            className="cursor-pointer rounded-md px-4 py-2 hover:bg-gray-100"
+                            onClick={() => {
+                              setMedicalSituation("Casual");
+                              setShowMedicalSituationDropdown(false);
+                            }}
+                          >
+                            Casual
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-2 justify-center mb-4">
+                  <div
+                    onClick={() => {
+                      setConfirm(!confirm);
+                    }}
+                    className={
+                      confirm
+                        ? "border rounded-md w-fit border-red p-1 h-fit cursor-pointer bg-red text-white duration-300"
+                        : "border rounded-md w-fit border-red p-1 h-fit cursor-pointer duration-300 text-red"
+                    }
+                  >
+                    <CheckIcon className="w-3" />
+                  </div>
+                  <p className="text-sm text-zinc-600">
+                    I confirm that the informations provided are valid and the
+                    quantity requested is accurate.{" "}
+                    <span className="text-red hover:underline cursor-pointer">
+                      read more.
+                    </span>
                   </p>
                 </div>
-                <ChevronDownIcon className="w-6" />
-                {showMedicalSituationDropdown && (
-                  <div className="absolute z-10 top-full left-0 bg-white shadow rounded-md border border-red-500 mt-1 w-full">
-                    <ul className="list-none p-0 m-0">
-                      <li
-                        className="cursor-pointer rounded-md px-4 py-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setMedicalSituation("Very Urgent");
-                          setShowMedicalSituationDropdown(false);
-                        }}
-                      >
-                        Very Urgent
-                      </li>
-                      <li
-                        className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setMedicalSituation("Surgery");
-                          setShowMedicalSituationDropdown(false);
-                        }}
-                      >
-                        Surgery
-                      </li>
-                      <li
-                        className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setMedicalSituation("Accident");
-                          setShowMedicalSituationDropdown(false);
-                        }}
-                      >
-                        Accident
-                      </li>
-                      <li
-                        className="cursor-pointer rounded-md px-4 py-2 hover:bg-gray-100"
-                        onClick={() => {
-                          setMedicalSituation("Casual");
-                          setShowMedicalSituationDropdown(false);
-                        }}
-                      >
-                        Casual
-                      </li>
-                    </ul>
-                  </div>
+                {center.todaySchedule.morning === false &&
+                center.todaySchedule.evening === false ? (
+                  <>
+                    <h2 className="bg-red min-h-[3rem] text-white px-6 rounded-xl min-w-fit cursor-not-allowed bg-opacity-50 flex justify-center items-center">
+                      Not Available
+                    </h2>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className={
+                        isWorking ||
+                        medicalSituation === "" ||
+                        patientName === "" ||
+                        !confirm
+                          ? "bg-red min-h-[3rem] text-white px-6 rounded-xl min-w-fit cursor-not-allowed bg-opacity-50 flex justify-center items-center"
+                          : "bg-red min-h-[3rem] text-white px-6 rounded-xl min-w-fit cursor-pointer hover:bg-opacity-80 duration-300 flex justify-center items-center"
+                      }
+                      disabled={
+                        isWorking === true ||
+                        medicalSituation === "" ||
+                        patientName === "" ||
+                        confirm === false ||
+                        (center.todaySchedule.morning === false &&
+                          center.todaySchedule.evening === false)
+                      }
+                      onClick={() => {
+                        handleRequestBlod();
+                      }}
+                    >
+                      {isWorking ? (
+                        <>
+                          <l-ring-2
+                            size="20"
+                            stroke="2"
+                            stroke-length="0.25"
+                            bg-opacity="0.1"
+                            speed="0.8"
+                            color="rgb(255,197,207)"
+                          ></l-ring-2>
+                        </>
+                      ) : (
+                        <>
+                          <h1 className={"text-latin"}>Request Packets</h1>
+                        </>
+                      )}
+                    </button>
+                  </>
                 )}
               </div>
-            </div>
-            <div className="flex gap-2 justify-center mb-4">
-              <div
-                onClick={() => {
-                  setConfirm(!confirm);
-                }}
-                className={
-                  confirm
-                    ? "border rounded-md w-fit border-red p-1 h-fit cursor-pointer bg-red text-white duration-300"
-                    : "border rounded-md w-fit border-red p-1 h-fit cursor-pointer duration-300 text-red"
-                }
-              >
-                <CheckIcon className="w-3" />
-              </div>
-              <p className="text-sm text-zinc-600">
-                I confirm that the informations provided are valid and the
-                quantity requested is accurate.{" "}
-                <span className="text-red hover:underline cursor-pointer">
-                  read more.
-                </span>
-              </p>
-            </div>
-            <button className="bg-red text-white py-4 px-6 rounded-xl min-w-fit hover:bg-opacity-80 duration-300">
-              Request Blood
-            </button>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
     </AppLayout>
   );
 };

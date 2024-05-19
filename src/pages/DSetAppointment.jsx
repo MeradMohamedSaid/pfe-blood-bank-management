@@ -22,7 +22,7 @@ const SetAppoitment = () => {
   const navigate = useNavigate();
   ////////////////////////////////////////////////////////////////////////////////
   const [isVerified, setIsVerified] = useState(false);
-  const [isAppoinmentSet, setIsAppoinmentSet] = useState(true);
+  const [isAppoinmentSet, setIsAppoinmentSet] = useState(false);
   const [center, setCenter] = useState();
   const [showModal, setShowModal] = useState(false);
   const [loading, setIsLoading] = useState(true);

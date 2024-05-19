@@ -1,5 +1,5 @@
 // Importing necessary modules from React and external libraries
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   EnvelopeIcon,
   LockClosedIcon,
@@ -69,11 +69,17 @@ const Login = () => {
         setTimeout(() => {
           setIsWorking((old) => false);
           switch (response.data.Session.role) {
+            case 1:
+              navigate("/admin");
+              break;
             case 2:
               navigate("/donor");
               break;
             case 3:
               navigate("/clinic");
+              break;
+            case 4:
+              navigate("/bloodcenter");
               break;
             default:
               break;
@@ -95,6 +101,18 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const handleKeyPress = async (event) => {
+      if (event.key === "Enter") {
+        await handleLogin();
+      }
+    };
+    const valid = userEmail && password;
+    !isWorking && valid && document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleLogin]);
   // Render UI
   return (
     <AppLayout>
@@ -200,11 +218,6 @@ const Login = () => {
           >
             {isWorking ? (
               <>
-                {/* <l-wobble
-                  size="15"
-                  speed="0.9"
-                  color="rgb(255,197,207)"
-                ></l-wobble> */}
                 <l-ring-2
                   size="20"
                   stroke="2"

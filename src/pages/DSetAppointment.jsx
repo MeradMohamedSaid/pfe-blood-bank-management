@@ -14,6 +14,8 @@ import {
   ChevronDownIcon,
   BuildingOffice2Icon,
 } from "@heroicons/react/24/outline";
+import "ldrs/ring2";
+
 const SetAppoitment = () => {
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,15 +28,15 @@ const SetAppoitment = () => {
   const [center, setCenter] = useState();
   const [showModal, setShowModal] = useState(false);
   const [loading, setIsLoading] = useState(true);
+  const [id, setId] = useState();
 
   useEffect(() => {
-    const centerPassed = queryParams.get("center");
+    const centerPassed = queryParams.get("id");
     if (centerPassed !== null) {
-      setCenter(centerPassed);
+      setId((oled) => centerPassed);
+    } else {
+      navigate("/donor");
     }
-    //else {
-    //   navigate("/donor");
-    // }
     const userStatus = async () => {
       const data = await getUserStatus();
       console.log("Data user Status : ", data);
@@ -43,6 +45,10 @@ const SetAppoitment = () => {
       } else {
         setIsVerified((old) => true);
       }
+      const cent = await getCenters(centerPassed);
+      setCenter((old) => cent);
+      setTimeSlots((oldd) => cent.weekSchedule);
+      setAppointments((oldldd) => cent.appointmentCounts);
       new Promise((resolve) => {
         setTimeout(() => {
           setIsLoading(false);
@@ -77,7 +83,7 @@ const SetAppoitment = () => {
     const Days = [
       "Sunday",
       "Monday",
-      "Thuesday",
+      "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
@@ -86,25 +92,93 @@ const SetAppoitment = () => {
     return Days[day - 1];
   }
 
-  const timeSlots = [
-    { day: 1, morning: true, evening: true }, // sunday
-    { day: 2, morning: true, evening: true },
-    { day: 3, morning: true, evening: false },
-    { day: 4, morning: true, evening: true },
-    { day: 5, morning: true, evening: false },
-    { day: 6, morning: false, evening: false },
-    { day: 7, morning: false, evening: false }, //saturday
-  ];
+  const getCenters = async (centerId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/getstroingcentreInfo/${centerId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const appointments = [
-    { day: 1, count: 10 },
-    { day: 2, count: 12 },
-    { day: 3, count: 5 },
-    { day: 4, count: 22 },
-    { day: 5, count: 3 },
-    { day: 6, count: 0 },
-    { day: 7, count: 0 },
-  ];
+      if (!response.data) {
+        throw new Error("Failed to fetch Centers data");
+      }
+
+      console.log("Centers data:", response.data.Results);
+      return response.data.Results;
+    } catch (error) {
+      console.error("Error fetching Centers data:", error.message);
+      navigate("/donor");
+      throw error;
+    }
+  };
+  const [exists, setExist] = useState(true);
+  const [isWorking, setIsWorking] = useState(false);
+  const handleRequestAppointment = async () => {
+    setIsWorking(true);
+    const obj = {
+      CenterId: center.id,
+      day: selectedDay.day,
+      period: selectedPeriod === "e",
+    };
+    console.log(obj);
+    const data = await postRequest(obj);
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        if (data.res === "exist") {
+          console.log("exist");
+        } else {
+          navigate("/donor");
+        }
+        setIsWorking((old) => false);
+
+        resolve();
+      }, 500);
+    });
+
+    if (data.done)
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          setIsAppoinmentSet(true);
+          resolve();
+        }, 100);
+      });
+  };
+
+  const postRequest = async (obj) => {
+    const url = "http://localhost:3000/addAppointement";
+    try {
+      const response = await axios.post(url, obj);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
+  };
+
+  const [timeSlots, setTimeSlots] = useState([
+    // { day: 1, morning: true, evening: true }, // sunday
+    // { day: 2, morning: true, evening: true },
+    // { day: 3, morning: true, evening: false },
+    // { day: 4, morning: true, evening: true },
+    // { day: 5, morning: true, evening: false },
+    // { day: 6, morning: false, evening: false },
+    // { day: 7, morning: false, evening: false }, //saturday
+  ]);
+
+  const [appointments, setAppointments] = useState([
+    // { day: 1, count: 10 },
+    // { day: 2, count: 12 },
+    // { day: 3, count: 5 },
+    // { day: 4, count: 22 },
+    // { day: 5, count: 3 },
+    // { day: 6, count: 0 },
+    // { day: 7, count: 0 },
+  ]);
 
   ///////////////////////////////////////////////////////////////////////////
   const [showDay, setShowDay] = useState(false);
@@ -243,14 +317,37 @@ const SetAppoitment = () => {
                   <div>
                     <button
                       className={
-                        selectedDay && selectedPeriod
+                        selectedDay && selectedPeriod && !isWorking
                           ? "bg-red p-3 rounded-xl h-fit flex justify-center items-center gap-2 w-full border border-red text-white mb-4 hover:bg-red cursor-pointer hover:opacity-50 duration-300"
                           : "bg-red p-3 rounded-xl h-fit flex opacity-30 justify-center items-center gap-2 w-full border border-red text-white mb-4 hover:bg-red cursor-not-allowed"
                       }
-                      disabled={!selectedDay || !selectedPeriod}
+                      disabled={!selectedDay || !selectedPeriod || isWorking}
+                      onClick={async () => {
+                        await handleRequestAppointment();
+                      }}
                     >
-                      Set Appointment
+                      {isWorking ? (
+                        <>
+                          <l-ring-2
+                            size="20"
+                            stroke="2"
+                            stroke-length="0.25"
+                            bg-opacity="0.1"
+                            speed="0.8"
+                            color="rgb(255,197,207)"
+                          ></l-ring-2>
+                        </>
+                      ) : (
+                        <>
+                          <h1 className={"text-latin"}>Set Appoitment</h1>
+                        </>
+                      )}
                     </button>
+                    {exists && (
+                      <h2 className="text-red text-center text-xs">
+                        Sorry , but it seems you already have an appointment
+                      </h2>
+                    )}
                   </div>
                 </div>
               </div>

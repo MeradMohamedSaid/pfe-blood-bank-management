@@ -85,7 +85,7 @@ const ClinicAppointmentPhase = () => {
   const getCenters = async (centerId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/getstroingcentreInfo/${centerId}`,
+        `http://localhost:3000/getstroingcentreInfoForClinic/${centerId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -185,7 +185,11 @@ const ClinicAppointmentPhase = () => {
                   <h1 className="text-3xl mb-4">Please fill this form :</h1>
                   <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
                     <BuildingOffice2Icon className="w-6" />
-                    <p className="mr-auto ">{center.name}</p>
+                    <p className="mr-auto ">
+                      {center.name.replace(/\b\w/g, (char) =>
+                        char.toUpperCase()
+                      )}
+                    </p>
                   </div>
                   <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
                     <UserIcon className="w-6" />

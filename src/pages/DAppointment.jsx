@@ -9,6 +9,7 @@ import axios from "axios";
 import Countdown from "../components/Counter";
 import AppointmentTimer from "../components/AppointmentTimer";
 import "ldrs/jelly";
+import { useNavigate } from "react-router-dom";
 
 // Default values shown
 
@@ -16,7 +17,12 @@ const DonnorApp = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [docs, setDocs] = useState(false);
   const [isAppoinmentSet, setIsAppoinmentSet] = useState(true);
-  const [center, setCenter] = useState();
+  const [center, setCenter] = useState({
+    name: null,
+    id: null,
+    selected: false,
+  });
+
   const [showModal, setShowModal] = useState(false);
   const [loading, setIsLoading] = useState(true);
 
@@ -40,11 +46,18 @@ const DonnorApp = () => {
         }, 500);
       });
     };
+    const fetchCenters = async () => {
+      console.log("fetching centers");
+      const cent = await getCenters();
+      setCenters((old) => cent);
+      console.log("Centers fetched : ", cent);
+    };
 
     const fetchAppo = async () => {
       const appo = await getUserAppoitment();
       if (!appo.res) {
         setIsAppoinmentSet((old) => false);
+        await fetchCenters();
       } else {
         console.log("fetch appo : ", appo);
         setIsAppoinmentSet((old) => true);
@@ -55,6 +68,32 @@ const DonnorApp = () => {
     userStatus();
     fetchAppo();
   }, []);
+
+  const [cernters, setCenters] = useState([]);
+
+  const getCenters = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/getstroingcentre",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.data) {
+        throw new Error("Failed to fetch Centers data");
+      }
+
+      console.log("Centers data:", response.data.Results);
+      return response.data.Results;
+    } catch (error) {
+      console.error("Error fetching Centers data:", error.message);
+      throw error;
+    }
+  };
+
   const [appointmentValue, setAppointmentValue] = useState();
   const getUserStatus = async () => {
     try {
@@ -98,6 +137,7 @@ const DonnorApp = () => {
       throw error;
     }
   };
+  const navigate = useNavigate();
 
   const getRealTimeWeekWithTimeSlots = async () => {
     try {
@@ -181,64 +221,56 @@ const DonnorApp = () => {
                       onClick={() => {
                         setShowModal(!showModal);
                       }}
-                      className="relative bg-white w-full py-4 px-6 rounded-xl flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer"
+                      className="relative bg-white  w-full py-4 px-6 rounded-xl flex justify-between items-center text-red  text-opacity-50 border hover:border-red duration-300 cursor-pointer"
                     >
-                      {center == null ? <p>Find a Center</p> : <p>{center}</p>}
-                      <ChevronDownIcon class="h-6 w-6 " />
+                      {center == null ? (
+                        <p>Find a Center</p>
+                      ) : (
+                        <p>{center.name}</p>
+                      )}
+                      <ChevronDownIcon class=" w-6 " />
                       {showModal ? (
-                        <div className="absolute top-16 overflow-y-auto rounded-md h-40 w-full left-0  text-sm bg-white border hover:border-red flex flex-col">
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 1");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 1
-                          </p>
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 2");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 2
-                          </p>
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 3");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 3
-                          </p>
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 4");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 4
-                          </p>
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 5");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 5
-                          </p>
-                          <p
-                            onClick={() => {
-                              setCenter("Medical Center 6");
-                            }}
-                            className="py-2 px-4 hover:bg-red-50 duration-300"
-                          >
-                            Medical Center 6
-                          </p>
+                        <div className="absolute top-16 overflow-y-auto rounded-md max-h-40 w-full left-0 text-sm bg-white border hover:border-red flex flex-col">
+                          {cernters &&
+                            cernters.map((cen, k) => {
+                              return (
+                                <p
+                                  key={k + 1}
+                                  onClick={() => {
+                                    setCenter((old) => ({
+                                      name: cen.name + ", " + cen.address,
+                                      id: cen.id,
+                                      selected: true,
+                                    }));
+                                  }}
+                                  className="py-2 px-4 hover:bg-red-50 duration-300"
+                                >
+                                  {`${cen.name.replace(/\b\w/g, (char) =>
+                                    char.toUpperCase()
+                                  )}, ${cen.address.replace(/\b\w/g, (char) =>
+                                    char.toUpperCase()
+                                  )}`}
+                                </p>
+                              );
+                            })}
                         </div>
                       ) : null}
                     </div>
-                    <button className="bg-red text-white py-4 px-9 rounded-xl min-w-fit hover:bg-opacity-80 duration-300">
+
+                    <button
+                      className={
+                        center.selected
+                          ? "bg-red text-white py-4 px-9 rounded-xl min-w-fit hover:bg-opacity-80 duration-300"
+                          : "bg-red bg-opacity-30 text-white py-4 px-9 rounded-xl min-w-fit cursor-not-allowed duration-300"
+                      }
+                      disabled={!center.selected}
+                      onClick={() => {
+                        navigate(
+                          `/donor/appointment/setAppointment?id=${center.id}`
+                        );
+                        console.log("Navigate");
+                      }}
+                    >
                       Continue
                     </button>
                   </div>

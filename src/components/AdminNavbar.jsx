@@ -102,10 +102,10 @@ const AdminNavbar = () => {
           <UsersIcon className="w-6" />
           Users
         </Link>
-        <Link className="h-fit w-fit w-full text-red gap-4 flex items-center p-4 rounded-xl bg-white hover:bg-red-100 hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer">
+        {/* <Link className="h-fit w-fit w-full text-red gap-4 flex items-center p-4 rounded-xl bg-white hover:bg-red-100 hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer">
           <Cog6ToothIcon className="w-6" />
           Settings
-        </Link>
+        </Link> */}
         <Link
           className="h-fit w-fit w-full bg-red text-white gap-4 flex items-center p-4 rounded-xl hover:scale-110 duration-300 hover:border-red border border-transparent cursor-pointer"
           onClick={() => {

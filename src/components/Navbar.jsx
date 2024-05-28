@@ -29,6 +29,7 @@ const Navbar = ({ loggedIn, role }) => {
   const handleLogout = async () => {
     await logout();
     navigate("/");
+    window.location.reload();
   };
   const logout = async () => {
     axios

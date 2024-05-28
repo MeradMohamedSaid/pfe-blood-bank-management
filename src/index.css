@@ -37,6 +37,14 @@ body {
   );
 }
 
+.bodybg {
+  background: linear-gradient(
+    0deg,
+    rgba(255, 221, 228, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
 .text-arabic {
   font-family: "Noto Kufi Arabic", sans-serif !important;
   direction: rtl;
@@ -115,6 +123,15 @@ body {
 
 .backdrop-blur {
   background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(8px); /* Blur effect */
+}
+.backdrop-blur-2 {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.938
+  ); /* Semi-transparent background */
   backdrop-filter: blur(8px); /* Blur effect */
 }
 

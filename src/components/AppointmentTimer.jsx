@@ -93,7 +93,8 @@ const AppointmentTimer = ({
               <p>
                 We look forward to see you at{" "}
                 <span className="text-red font-bold">
-                  {name} Center, {address}
+                  {name.replace(/\b\w/g, (char) => char.toUpperCase())} Center,{" "}
+                  {address.replace(/\b\w/g, (char) => char.toUpperCase())}
                 </span>{" "}
                 in :
               </p>

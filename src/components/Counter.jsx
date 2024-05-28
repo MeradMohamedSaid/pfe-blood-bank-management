@@ -44,7 +44,8 @@ function Countdown({ unixTimestamp }) {
             {timeLeft.days < 10 && "0"}
             {timeLeft.days}
           </p>{" "}
-          Days,
+          Day
+          {timeLeft.days > 1 && "s"},
         </>
       )}
       <>
@@ -52,21 +53,23 @@ function Countdown({ unixTimestamp }) {
           {timeLeft.hours < 10 && "0"}
           {timeLeft.hours}
         </p>{" "}
-        Hours,
+        Hour
+        {timeLeft.hours > 1 && "s"},
       </>
       <>
         <p className="min-w-[3.1rem] flex justify-centent-center text-center">
           {timeLeft.minutes < 10 && "0"}
           {timeLeft.minutes}
         </p>{" "}
-        Minutes,
+        Minute
+        {timeLeft.minutes > 1 && "s"},
       </>
       <>
         <p className="min-w-[3.1rem] flex justify-centent-center text-center">
           {timeLeft.seconds < 10 && "0"}
           {timeLeft.seconds}
         </p>
-        Seconds
+        Second{timeLeft.seconds > 1 && "s"}
       </>
     </div>
   );

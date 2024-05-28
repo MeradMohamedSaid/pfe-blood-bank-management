@@ -481,25 +481,27 @@ const ClinicAppointment = () => {
                     ))}
                 </div>
                 {/* Render pager */}
-                <div className="flex justify-center items-center gap-4">
-                  <button
-                    className="p-2 border border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
-                    onClick={() => goToPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeftIcon className="w-6 h-6" />
-                  </button>
-                  <h1 className="text-red text-xl">
-                    Page {currentPage} of {totalPages}
-                  </h1>
-                  <button
-                    className="p-2 border border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
-                    onClick={() => goToPage(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    <ChevronRightIcon className="w-6 h-6" />
-                  </button>
-                </div>
+                {totalPages > 1 && (
+                  <div className="flex justify-center items-center gap-4">
+                    <button
+                      className="p-2 border border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeftIcon className="w-6 h-6" />
+                    </button>
+                    <h1 className="text-red text-xl">
+                      Page {currentPage} of {totalPages}
+                    </h1>
+                    <button
+                      className="p-2 border border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRightIcon className="w-6 h-6" />
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

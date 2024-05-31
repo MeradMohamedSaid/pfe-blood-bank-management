@@ -107,8 +107,6 @@ const Navbar = ({ loggedIn, role }) => {
               )}
             </>
           )}
-
-          <MagnifyingGlassIcon className="hover:text-red text-gray-400 duration-300 cursor-pointer" />
           <div className="relative">
             <div
               className="w-8 border cursor-pointer border-slate-100 border rounded-full overflow-hidden hover:border-[#F0073B] duration-300"

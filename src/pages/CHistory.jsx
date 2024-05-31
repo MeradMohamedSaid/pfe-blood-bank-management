@@ -392,10 +392,10 @@ const ClinicHistory = () => {
                                     {item.status === 0
                                       ? "Request Submited"
                                       : item.status === 1
-                                      ? "Transmitted"
+                                      ? "Processed"
                                       : item.status === 2
                                       ? "Out For Delivery"
-                                      : "Received"}
+                                      : "Packet Received"}
                                   </p>
                                 </>
                               ) : (

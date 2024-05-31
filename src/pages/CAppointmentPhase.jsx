@@ -13,6 +13,7 @@ import {
   PhoneIcon,
   UserIcon,
   BuildingOffice2Icon,
+  LifebuoyIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
@@ -32,6 +33,7 @@ const ClinicAppointmentPhase = () => {
   const [showMedicalSituationDropdown, setShowMedicalSituationDropdown] =
     useState(false);
   const [medicalSituation, setMedicalSituation] = useState("");
+  const [bloodType, setBloodType] = useState("");
   ///////////////////////////////////////////////////////////////////////////
   const [center, setCenter] = useState();
   const [id, setId] = useState();
@@ -51,6 +53,9 @@ const ClinicAppointmentPhase = () => {
         setIsVerified((old) => true);
       }
       const cent = await getCenters(centerId);
+      if (cent.count === 0) {
+        navigate("/clinic/appointment");
+      }
       setCenter((old) => cent);
       new Promise((resolve) => {
         setTimeout(() => {
@@ -111,6 +116,10 @@ const ClinicAppointmentPhase = () => {
     setPatientName(event.target.value);
   };
 
+  const handleBloodChange = (event) => {
+    setBloodType(event.target.value);
+  };
+
   const [isWorking, setIsWorking] = useState(false);
   const handleRequestBlod = async () => {
     setIsWorking(true);
@@ -124,7 +133,9 @@ const ClinicAppointmentPhase = () => {
         medicalSituation === "Accident" ||
         medicalSituation === "Surgery"
         ? 1
-        : 0
+        : 0,
+      "blood type : ",
+      bloodType
     );
     const obj = {
       storingCentreID: center.id,
@@ -135,6 +146,7 @@ const ClinicAppointmentPhase = () => {
         medicalSituation === "Surgery"
           ? 1
           : 0,
+      bloodtype: bloodType,
     };
     const data = await postRequest(obj);
     await new Promise((resolve) => {
@@ -148,8 +160,10 @@ const ClinicAppointmentPhase = () => {
       await new Promise((resolve) => {
         setTimeout(() => {
           setIsAppoinmentSet(true);
-          resolve();
         }, 100);
+        setTimeout(() => {
+          navigate("/clinic/appointment");
+        }, 4000);
       });
   };
 
@@ -175,8 +189,29 @@ const ClinicAppointmentPhase = () => {
             {!isVerified ? (
               <AppNotice />
             ) : isAppoinmentSet ? (
-              <div className="h-[80vh] flex justify-center flex-col">
-                Your Request is passed, check history.
+              <div className="h-[80vh] flex flex-col justify-center items-center fade-in-up">
+                <div className="flex flex-col justify-center items-center text-center gap-3 backdrop-blur bg-white py-10 px-10 rounded-xl">
+                  <h2 className="text-3xl">Your request has been received</h2>
+                  <p>
+                    Your request has been received and is currently being
+                    processed by our team. The packet will be delivered as soon
+                    as possible. You will be automatically redirected to the{" "}
+                    <span
+                      className="text-red font-bold cursor-pointer"
+                      onClick={() => navigate("/clinic/appointment")}
+                    >
+                      Requests History Page
+                    </span>{" "}
+                    shortly.
+                  </p>
+                  <p>- or -</p>
+                  <button
+                    className="px-8 py-2 bg-red text-white rounded-xl hover:bg-opacity-70 duration-300"
+                    onClick={() => navigate("/clinic/appointment")}
+                  >
+                    Take me there
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="h-[80vh] flex justify-center flex-col w-[26rem] mx-auto fade-in-up">
@@ -199,6 +234,17 @@ const ClinicAppointmentPhase = () => {
                       class="outline-none w-full"
                       value={patientName}
                       onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="bg-white p-4 rounded-xl flex justify-between items-center gap-2 w-full border border-red text-red mb-4">
+                    <LifebuoyIcon className="w-6" />
+
+                    <input
+                      placeholder="Blood Type"
+                      type="text"
+                      class="outline-none w-full"
+                      value={bloodType}
+                      onChange={handleBloodChange}
                     />
                   </div>
                   <div

@@ -67,7 +67,17 @@ const DonorHistory = () => {
         return true; // Return true to include all items if filter type is unknown
     }
   });
-
+  const fetchHistory = async () => {
+    setIsLoading((old) => true);
+    const array = await getDonorHistory();
+    setTableData((old) => array.arr);
+    new Promise((resolve) => {
+      setTimeout(() => {
+        setIsLoading((old) => false);
+        resolve();
+      }, 500);
+    });
+  };
   useEffect(() => {
     const userStatus = async () => {
       const data = await getUserStatus();
@@ -85,10 +95,6 @@ const DonorHistory = () => {
       });
     };
 
-    const fetchHistory = async () => {
-      const array = await getDonorHistory();
-      setTableData((old) => array.arr);
-    };
     userStatus();
     fetchHistory();
   }, []);
@@ -252,7 +258,10 @@ const DonorHistory = () => {
                           </div>
                         </div>
                       ) : null}
-                      <div className="p-2 border ml-auto border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300">
+                      <div
+                        onClick={async () => await fetchHistory()}
+                        className="p-2 border ml-auto border-red rounded-xl flex justify-center items-center gap-1 text-red cursor-pointer hover:bg-red hover:text-white duration-300"
+                      >
                         <ArrowPathIcon className="w-6 h-6" />
                       </div>
                     </div>

@@ -46,8 +46,11 @@ const ClinicAppointment = () => {
         id: cen.id,
         clinicName: cen.name,
         isAvailable: cen.todaySchedule.morning || cen.todaySchedule.evening,
-        canRequest: cen.todaySchedule.morning || cen.todaySchedule.evening,
+        canRequest:
+          (cen.todaySchedule.morning || cen.todaySchedule.evening) &&
+          cen.count > 0,
         stock: cen.maxCapacite,
+        count: cen.count,
       };
       newCenters.push(cini);
     });
@@ -232,10 +235,10 @@ const ClinicAppointment = () => {
         });
         break;
       case 3:
-        data.sort((a, b) => a.stock - b.stock);
+        data.sort((a, b) => a.count - b.count);
         break;
       case 4:
-        data.sort((a, b) => b.stock - a.stock);
+        data.sort((a, b) => b.count - a.count);
         break;
       case 5:
         data.sort((a, b) => {
@@ -434,7 +437,7 @@ const ClinicAppointment = () => {
                         {item ? (
                           <>
                             <p className="p-4">{item.clinicName}</p>
-                            <p className="p-4">{item.stock}</p>
+                            <p className="p-4">{item.count}</p>
                             <p className="p-4">
                               {item.isAvailable ? (
                                 <p className="bg-green-400  cursor-default text-white w-fit text-sm p-1 rounded-md">

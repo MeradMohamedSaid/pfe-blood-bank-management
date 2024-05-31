@@ -27,7 +27,7 @@ import {
 import Loader from "./Loader";
 import axios from "axios";
 
-const CenterAppointments = ({ id }) => {
+const CenterAppointments = () => {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
 

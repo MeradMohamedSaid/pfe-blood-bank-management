@@ -44,6 +44,9 @@ import {
 import CenterAppointments from "../components/CenterAppointments";
 import AppoTable from "../components/AppointmentTable";
 import CenterApplication from "../components/CenterApplication";
+import BloodRequests from "../components/BloodRequests";
+import PacketsRequest from "../components/PacketsRequest";
+import { use } from "i18next";
 const BloodCenterDashBoard = () => {
   const [dashboard, setDashboard] = useState(1);
   const [timeFrame, setTimeFrame] = useState("Daily");
@@ -53,7 +56,7 @@ const BloodCenterDashBoard = () => {
   const [numOfPackets, setNumOfPackets] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [donor, setDonor] = useState();
-  const [picker, setPicker] = useState("donors");
+  const [picker, setPicker] = useState("Packets");
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [filterType, setFilterType] = useState("id"); // Default filter type is "id"
@@ -94,6 +97,13 @@ const BloodCenterDashBoard = () => {
     setUserToModal((odl) => idc);
     setDonorDataModal((old) => true);
     setToDisp((oo) => role);
+  };
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [showPackets, setShowPackets] = useState(false);
+  const [packetId, setPacketId] = useState();
+  const handlePacketRequest = (id) => {
+    setShowPackets((old) => true);
+    setPacketId((old) => id);
   };
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Chart.register(
@@ -230,7 +240,12 @@ const BloodCenterDashBoard = () => {
         // Update the table data
         const newTableData = bloodPackets.map((packet) => {
           const expDate = new Date(packet.expDate);
-          const status = expDate < today ? "expired" : "fresh";
+          const status =
+            packet.assigned === 1
+              ? "not available"
+              : expDate < today
+              ? "expired"
+              : "fresh";
           return {
             donor: {
               firstName: packet.name.split(" ")[0],
@@ -239,6 +254,7 @@ const BloodCenterDashBoard = () => {
             bloodType: packet.bloodType,
             status: status,
             packetSize: `${packet.packetSize}ml`,
+            id: packet.id,
           };
         });
 
@@ -592,7 +608,8 @@ const BloodCenterDashBoard = () => {
                         <div className="">
                           {/* Render table */}
                           <div className="rounded-xl overflow-hidden border border-red mb-4">
-                            <div className="grid grid-cols-4 bg-red text-white">
+                            <div className="grid grid-cols-5 bg-red text-white">
+                              <p className="p-4 font-bold text-xl">id</p>
                               <p className="p-4 font-bold text-xl">Donor</p>
                               <p className="p-4 font-bold text-xl">
                                 Blood Type
@@ -609,7 +626,7 @@ const BloodCenterDashBoard = () => {
                               .map((item, index) => (
                                 <div
                                   key={index}
-                                  className={`grid grid-cols-4 hover: ${
+                                  className={`grid grid-cols-5 hover: ${
                                     index % 2 === 0
                                       ? "bg-red-200"
                                       : "bg-transparent"
@@ -617,7 +634,8 @@ const BloodCenterDashBoard = () => {
                                 >
                                   {item ? (
                                     <>
-                                      <p className="p-4">
+                                      <p className="p-4">{item.id}</p>
+                                      <p className="p-4 text-l">
                                         {item.donor.firstName +
                                           " " +
                                           item.donor.lastName}
@@ -625,9 +643,9 @@ const BloodCenterDashBoard = () => {
                                       <p className="p-4">{item.bloodType}</p>
                                       <p
                                         className={
-                                          item.status === "expired"
-                                            ? "p-4 text-red"
-                                            : "p-4 text-green-500"
+                                          item.status === "fresh"
+                                            ? "p-4 text-green-500"
+                                            : "p-4 text-red"
                                         }
                                       >
                                         {item.status}
@@ -1042,6 +1060,9 @@ const BloodCenterDashBoard = () => {
                         requestStatus={requestStatus}
                         itemsPerPage={itemsPerPage}
                       /> */}
+                      <BloodRequests
+                        handlePacketRequest={handlePacketRequest}
+                      />
                     </>
                   )}
                   {picker === "Appointments" && (
@@ -1088,6 +1109,14 @@ const BloodCenterDashBoard = () => {
             </div>
           </div>
         </>
+      )}
+      {showPackets && (
+        <PacketsRequest
+          close={() => {
+            setShowPackets(false);
+          }}
+          id={packetId}
+        />
       )}
     </AppLayout>
   );
